@@ -339,6 +339,16 @@
     padding: 10px 14px;
     font-size: 13.5px;
   }
+  .aid-avoid{
+    margin-top: 14px;
+    background: var(--ochre-soft);
+    border-left: 3px solid var(--ochre);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+  }
+  .aid-avoid ul, .aid-emergency ul{ margin: 6px 0 0; padding-left: 18px; }
+  .aid-avoid li, .aid-emergency li{ margin-bottom: 6px; }
 
   footer{
     margin-top: 50px;
@@ -635,36 +645,43 @@ const FOOD_TOPICS = [
   { id:'milch', title:'Stillen / Flasche', ages:['stillen'],
     typical:['Muttermilch oder Säuglingsmilch ist bis ca. 6 Monate alleinige Nahrung','Stillen bzw. Füttern nach Bedarf statt nach starrem Zeitplan','Trinkmengen schwanken von Tag zu Tag, das ist normal'],
     tips:['Hunger- und Sättigungssignale respektieren statt Restmengen zu erzwingen','ruhige, störungsarme Umgebung beim Füttern schaffen','bei Stillproblemen frühzeitig Hebamme oder Stillberatung einbeziehen'],
-    refusal:['kurzfristige Trinkschwäche ist oft durch Zahnen, Schnupfen oder einen Wachstumsschub bedingt','kleinere, dafür häufigere Mahlzeiten anbieten','bei anhaltender Verweigerung oder stagnierendem Gewicht die Kinderarztpraxis einbeziehen']
+    refusal:['kurzfristige Trinkschwäche ist oft durch Zahnen, Schnupfen oder einen Wachstumsschub bedingt','kleinere, dafür häufigere Mahlzeiten anbieten','bei anhaltender Verweigerung oder stagnierendem Gewicht die Kinderarztpraxis einbeziehen'],
+    avoid:['Honig – Gefahr von Säuglingsbotulismus, da das unreife Darmsystem die Bakteriensporen noch nicht abwehren kann','Kuhmilch als Getränk/Hauptnahrung – deckt den Nährstoffbedarf nicht und belastet die noch unreifen Nieren','zugesetztes Salz – die Nieren können überschüssiges Natrium noch nicht ausreichend ausscheiden','zugesetzter Zucker – unnötige Kalorien und frühe Prägung auf Süßes']
   },
   { id:'beikost', title:'Beikosteinführung', ages:['beikost'],
     typical:['Beikostreife zeigt sich durch aufrechtes Sitzen, Interesse am Essen der Eltern und das Verschwinden des Zungenstoßreflexes','Beikost ergänzt die Milchnahrung zunächst, ersetzt sie nicht sofort vollständig'],
     tips:['mit einer Komponente beginnen (z. B. Gemüsebrei oder breifreie Beikost/Fingerfood)','neue Lebensmittel einzeln einführen und einige Tage abwarten','Essen als entspannte gemeinsame Zeit gestalten statt als Fütter-Pflicht'],
-    refusal:['Ablehnung neuer Konsistenzen oder Geschmäcker ist ein normaler Teil des Kennenlernens','ein Lebensmittel braucht oft 10–15 Wiederholungen, bis es akzeptiert wird','kein Drängen oder Nachschieben von Löffeln – das verstärkt die Abwehr eher, als sie zu lösen']
+    refusal:['Ablehnung neuer Konsistenzen oder Geschmäcker ist ein normaler Teil des Kennenlernens','ein Lebensmittel braucht oft 10–15 Wiederholungen, bis es akzeptiert wird','kein Drängen oder Nachschieben von Löffeln – das verstärkt die Abwehr eher, als sie zu lösen'],
+    avoid:['Honig – weiterhin Botulismus-Risiko bis zum vollendeten 1. Lebensjahr','rohes Ei, roher Fisch, rohes Fleisch – Salmonellen- und Keimrisiko bei noch unreifem Immunsystem','zugesetztes Salz und Zucker in der Beikost – unreife Nierenfunktion, ungünstige Geschmacksprägung','Kuhmilch als Hauptgetränk – deckt den Eisen- und Nährstoffbedarf nicht ausreichend (kleine Mengen in Speisen sind meist unbedenklich)']
   },
   { id:'fingerfood', title:'Fingerfood & Familienkost', ages:['beikost','kleinkind'],
     typical:['Kauen und Abbeißen werden aktiv geübt','Interesse an eigenständigem Essen mit den Händen wächst','das Essverhalten wird von Mahlzeit zu Mahlzeit zunehmend unberechenbar'],
-    tips:['weiche, kindgerecht geschnittene Stücke der Familienmahlzeit anbieten','Selbstständigkeit beim Essen fördern, auch wenn es unordentlich wird','feste Essenszeiten am Familientisch etablieren']
+    tips:['weiche, kindgerecht geschnittene Stücke der Familienmahlzeit anbieten','Selbstständigkeit beim Essen fördern, auch wenn es unordentlich wird','feste Essenszeiten am Familientisch etablieren'],
+    avoid:['ganze Nüsse, ganze Weintrauben, Popcorn, harte Rohkoststücke – hohes Erstickungsrisiko, da die Kautechnik noch unsicher ist','Honig bis zum vollendeten 1. Lebensjahr – Botulismus-Risiko','stark salzige oder stark gezuckerte Fertigprodukte – unnötige Belastung für Nieren und Zähne, ungünstige Geschmacksprägung']
   },
   { id:'kleinkind_esser', title:'Kleinkind-Esser & Neophobie', ages:['kleinkind'],
     typical:['Nahrungsneophobie – Skepsis gegenüber neuen Lebensmitteln – ist ein normaler Entwicklungsschritt','der Appetit schwankt stark, weil sich das Wachstumstempo verlangsamt','Vorlieben können sich von Tag zu Tag ändern'],
     tips:['kleine Portionen anbieten, Nachschlag ist jederzeit möglich','neue Lebensmittel unaufgeregt neben Bekanntem platzieren, ohne Zwang','Mahlzeiten zeitlich begrenzen (ca. 20–30 Minuten) statt endlos zu verhandeln'],
-    refusal:['Essen abzulehnen ist in dieser Phase meist Ausdruck von Autonomiebestreben, nicht von Hunger','Machtkämpfe am Esstisch möglichst vermeiden','Verantwortung aufteilen: Eltern entscheiden was, wann und wo gegessen wird – das Kind entscheidet, ob und wie viel']
+    refusal:['Essen abzulehnen ist in dieser Phase meist Ausdruck von Autonomiebestreben, nicht von Hunger','Machtkämpfe am Esstisch möglichst vermeiden','Verantwortung aufteilen: Eltern entscheiden was, wann und wo gegessen wird – das Kind entscheidet, ob und wie viel'],
+    avoid:['ganze Nüsse, unzerteilte Weintrauben, harte Bonbons, Popcorn, rohes Steinobst mit Kern – weiterhin Erstickungsgefahr durch unvollständige Kautechnik','roher Fisch (z. B. Sushi), rohes oder halbgares Fleisch, rohe Eier (z. B. in selbstgemachter Mayonnaise) – Infektionsrisiko','stark salzige oder stark gezuckerte Fertigprodukte als Dauerkost – ungünstige Geschmacksprägung, hohe Nieren- und Zahnbelastung','Honig ist ab dem vollendeten 1. Lebensjahr in Maßen unbedenklich']
   },
   { id:'kita_essen', title:'Essen im Kindergartenalter', ages:['kita'],
     typical:['Vorlieben und Abneigungen werden bewusster geäußert','der Einfluss von Kita und Freunden auf das Essverhalten wächst','Tischmanieren werden zunehmend erlernt'],
     tips:['das Kind altersgerecht in die Essenszubereitung einbeziehen (waschen, rühren, anrichten)','gemeinsame Mahlzeiten als bildschirmfreie, soziale Zeit gestalten','die eigene Vorbildfunktion nutzen – Kinder essen eher, was sie am Familientisch sehen'],
-    refusal:['Süßes als Belohnung fürs „brave Essen“ vermeiden – das wertet Gemüse ab und Süßes auf','wiederholtes, druckfreies Anbieten bleibt die wichtigste Strategie bei Ablehnung']
+    refusal:['Süßes als Belohnung fürs „brave Essen“ vermeiden – das wertet Gemüse ab und Süßes auf','wiederholtes, druckfreies Anbieten bleibt die wichtigste Strategie bei Ablehnung'],
+    avoid:['ganze Nüsse und harte, runde Lebensmittel (z. B. ganze Weintrauben, harte Bonbons) weiterhin nur zerkleinert anbieten – Erstickungsgefahr besteht bis zum sicheren Kauen','größere Mengen roher tierischer Lebensmittel (roher Fisch, rohes Fleisch, rohe Eier) – Infektionsrisiko bei noch nicht voll ausgereiftem Immunsystem','koffeinhaltige Getränke wie Energy-Drinks oder größere Mengen Cola/Kaffee – belasten Herz-Kreislauf-System und Schlaf','stark verarbeitete, sehr salzige oder süße Snacks als Dauerkost – fördern ungünstige Ernährungsgewohnheiten']
   },
   { id:'schulkind_essen', title:'Essverhalten im Schulalter', ages:['schulkind'],
     typical:['selbstständigere Essensentscheidungen, etwa in der Schule oder bei Freunden','wachsender Einfluss von Werbung und Peergroup','Frühstücks- und Pausenverhalten wird eigenständiger'],
     tips:['gemeinsame Mahlzeiten als festen Ankerpunkt im Alltag beibehalten','das Kind in die Essensplanung einbeziehen (Einkauf, gemeinsames Kochen)','Medienkompetenz zu Werbung und Ernährung altersgerecht fördern'],
-    refusal:['wählerisches Essen ist oft noch ein Ausläufer der Kleinkindphase – gelassen bleiben und weiter druckfrei anbieten','bei deutlichem Rückzug von Mahlzeiten oder auffälligem Gewichtsverlauf ärztlichen Rat einholen']
+    refusal:['wählerisches Essen ist oft noch ein Ausläufer der Kleinkindphase – gelassen bleiben und weiter druckfrei anbieten','bei deutlichem Rückzug von Mahlzeiten oder auffälligem Gewichtsverlauf ärztlichen Rat einholen'],
+    avoid:['Energy-Drinks und stark koffeinhaltige Getränke – hohe Koffeinmengen können Herzrhythmus, Schlaf und Konzentration beeinträchtigen','Alkohol in jeglicher Form – auch kleine Mengen schädigen die noch in Entwicklung befindliche Leber und das Gehirn','exzessiver Konsum stark verarbeiteter, zuckerhaltiger Lebensmittel – begünstigt langfristig Übergewicht und ungünstige Essgewohnheiten']
   },
   { id:'jugend_essen', title:'Essverhalten bei Jugendlichen', ages:['jugend'],
     typical:['die Autonomie bei Essensentscheidungen nimmt deutlich zu','Körperbild und Vergleich mit Gleichaltrigen gewinnen an Bedeutung','unregelmäßige Essenszeiten durch Schule und Freizeit sind möglich'],
     tips:['gemeinsame Mahlzeiten so oft wie möglich beibehalten, aber ohne Zwang','über Ernährung sprechen statt über Aussehen oder Gewicht','Autonomie bei der Essensauswahl zulassen, solange die Gesamternährung ausgewogen bleibt'],
-    refusal:['deutliche Einschränkung der Nahrungsmenge, häufiges Auslassen von Mahlzeiten oder starke gedankliche Beschäftigung mit Kalorien/Gewicht sind ernstzunehmende Warnzeichen','offen und ohne Vorwurf ansprechen, statt Druck aufzubauen','professionelle Unterstützung (Kinderarztpraxis, Ernährungsberatung, ggf. Therapie) frühzeitig suchen']
+    refusal:['deutliche Einschränkung der Nahrungsmenge, häufiges Auslassen von Mahlzeiten oder starke gedankliche Beschäftigung mit Kalorien/Gewicht sind ernstzunehmende Warnzeichen','offen und ohne Vorwurf ansprechen, statt Druck aufzubauen','professionelle Unterstützung (Kinderarztpraxis, Ernährungsberatung, ggf. Therapie) frühzeitig suchen'],
+    avoid:['Alkohol – schädigt die noch reifende Gehirnentwicklung besonders stark, in Deutschland zudem altersabhängig gesetzlich eingeschränkt','Energy-Drinks in großen Mengen – hohe Koffein- und Zuckermengen belasten Herz-Kreislauf-System und Schlaf','stark kalorienreduzierte Diät- oder „Fatburner“-Produkte ohne ärztliche Begleitung – Risiko für Nährstoffmängel in einer Phase mit hohem Nährstoffbedarf']
   },
   { id:'ablehnung_allgemein', title:'Wenn dein Kind generell Essen ablehnt', general:true,
     tips:['Verantwortung aufteilen: Eltern bestimmen was, wann und wo gegessen wird – das Kind entscheidet, ob und wie viel es davon isst','keine Druckmittel wie Bestechung, Zwang oder Bestrafung beim Essen einsetzen','neue Lebensmittel wiederholt und ohne Erwartungsdruck anbieten – Akzeptanz braucht oft viele Anläufe','Essen nicht zum Konfliktthema machen, eine ruhige Atmosphäre wirkt stärker als Überredung','den Überblick über eine ganze Woche behalten statt über einzelne Mahlzeiten zu urteilen']
@@ -835,6 +852,9 @@ function renderFood(){
     if (t.refusal && t.refusal.length){
       body += `<div class="aid-emergency"><strong>Wenn das Kind ablehnt:</strong><ul>${t.refusal.map(s=>`<li>${s}</li>`).join('')}</ul></div>`;
     }
+    if (t.avoid && t.avoid.length){
+      body += `<div class="aid-avoid"><strong>Lebensmittel, die in diesem Alter vermieden werden sollten:</strong><ul>${t.avoid.map(s=>`<li>${s}</li>`).join('')}</ul></div>`;
+    }
     det.innerHTML = `<summary>${t.title}${t.general ? '' : ''}<span class="plus">+</span></summary><div class="aid-body">${body}</div>`;
     foodListEl.appendChild(det);
   });
@@ -877,7 +897,7 @@ FIRST_AID.forEach(a => {
 // food entries are also searchable
 FOOD_TOPICS.forEach(t => {
   const ageLabel = t.general ? 'alle Altersstufen' : t.ages.map(id => FOOD_AGE_GROUPS.find(g=>g.id===id)?.label).filter(Boolean).join(', ');
-  ['typical','tips','refusal'].forEach(key => {
+  ['typical','tips','refusal','avoid'].forEach(key => {
     (t[key] || []).forEach(s => {
       searchIndex.push({ phaseId: null, aidId: null, foodId: t.id, ageRange: ageLabel, phaseName: 'Essen & Essverhalten', cat: t.title, text: s });
     });
