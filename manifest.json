@@ -1,0 +1,20 @@
+{
+  "name": "MEILENSTEIN – Elternratgeber",
+  "short_name": "Meilenstein",
+  "description": "Entwicklungsphasen von der Geburt bis zur Pubertät, Verhaltens-Suche und Erste-Hilfe-Maßnahmen nach Alter.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#1B2430",
+  "theme_color": "#1B2430",
+  "lang": "de",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

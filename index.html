@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MEILENSTEIN – Elternratgeber</title>
+<meta name="description" content="Entwicklungsphasen von der Geburt bis zur Pubertät, durchsuchbar nach Verhaltensweisen, plus Erste-Hilfe-Maßnahmen nach Alter.">
+<meta name="theme-color" content="#1B2430">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #1B2430;
+    --bg-raised: #212C3A;
+    --bg-card: #24303F;
+    --teal: #2F5D5A;
+    --teal-soft: #3A6E6A;
+    --ochre: #D9A441;
+    --ochre-soft: rgba(217,164,65,0.16);
+    --cream: #F3EFE6;
+    --cream-dim: #C9C4B8;
+    --alert: #C43E3E;
+    --alert-soft: rgba(196,62,62,0.14);
+    --line: rgba(243,239,230,0.12);
+    --radius: 14px;
+    --shadow: 0 10px 30px rgba(0,0,0,0.35);
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  }
+
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: var(--bg);
+    color: var(--cream);
+    font-family: var(--font-body);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 60px;
+  }
+  body::before{
+    content:"";
+    position: fixed; inset: 0;
+    background-image: radial-gradient(circle at 1px 1px, rgba(243,239,230,0.035) 1px, transparent 0);
+    background-size: 22px 22px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  a{ color: inherit; }
+  button{ font-family: inherit; }
+  ::selection{ background: var(--ochre); color: var(--bg); }
+  :focus-visible{ outline: 2px solid var(--ochre); outline-offset: 2px; }
+
+  .wrap{ max-width: 1080px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    padding: 40px 0 28px;
+    border-bottom: 1px solid var(--line);
+  }
+  .brand{
+    display:flex; align-items:baseline; gap: 12px; margin-bottom: 6px;
+  }
+  .brand .mark{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    color: var(--ochre);
+    border: 1px solid var(--ochre);
+    border-radius: 999px;
+    padding: 3px 10px;
+  }
+  h1.title{
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-size: clamp(34px, 6vw, 54px);
+    margin: 6px 0 8px;
+    letter-spacing: -0.01em;
+  }
+  .subtitle{
+    color: var(--cream-dim);
+    font-size: 16px;
+    max-width: 56ch;
+    margin: 0 0 26px;
+  }
+
+  .searchbox{
+    position: relative;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 4px;
+    display:flex;
+    align-items:center;
+    box-shadow: var(--shadow);
+  }
+  .searchbox input{
+    flex:1;
+    background: transparent;
+    border: none;
+    color: var(--cream);
+    font-family: var(--font-body);
+    font-size: 16px;
+    padding: 14px 12px;
+  }
+  .searchbox input::placeholder{ color: var(--cream-dim); }
+  .searchbox input:focus{ outline: none; }
+  .searchbox .icon{
+    padding: 0 12px;
+    color: var(--cream-dim);
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+  .search-hint{
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--cream-dim);
+    font-family: var(--font-mono);
+  }
+
+  #search-results{
+    margin-top: 16px;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+  }
+  #search-results.active{ display: flex; }
+  .result-item{
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--ochre);
+    border-radius: 10px;
+    padding: 12px 14px;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+  }
+  .result-item:hover{ border-color: var(--ochre); }
+  .result-item .r-age{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ochre);
+    letter-spacing: 0.04em;
+  }
+  .result-item .r-cat{
+    font-size: 12px;
+    color: var(--cream-dim);
+    margin-left: 8px;
+  }
+  .result-item .r-text{ margin-top: 4px; font-size: 14.5px; }
+  .result-item mark{ background: var(--ochre-soft); color: var(--ochre); padding: 0 2px; border-radius: 3px; }
+  .no-results{ color: var(--cream-dim); font-size: 14px; padding: 8px 2px; }
+
+  /* ---------- TABS ---------- */
+  .tabbar{
+    display:flex; gap: 6px;
+    margin: 26px 0 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .tabbar button{
+    background: none; border: none; color: var(--cream-dim);
+    font-size: 15px; font-weight: 600; padding: 12px 6px;
+    cursor: pointer; border-bottom: 2px solid transparent;
+    margin-right: 18px;
+    font-family: var(--font-body);
+  }
+  .tabbar button.active{ color: var(--cream); border-bottom-color: var(--ochre); }
+
+  .view{ display: none; padding-top: 28px; }
+  .view.active{ display: block; }
+
+  /* ---------- RULER NAV + PHASES ---------- */
+  .phases-layout{
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 18px;
+  }
+  .ruler{
+    position: sticky;
+    top: 14px;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: fit-content;
+  }
+  .ruler .beam{
+    width: 3px;
+    background: linear-gradient(var(--teal), var(--ochre));
+    border-radius: 3px;
+    flex: 1;
+    position: relative;
+  }
+  .ruler-tick{
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    color: var(--cream-dim);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    width: 46px;
+    text-align: center;
+    padding: 5px 2px;
+    border-radius: 7px;
+    cursor: pointer;
+    margin: 3px 0;
+  }
+  .ruler-tick:hover, .ruler-tick.active{
+    color: var(--bg);
+    background: var(--ochre);
+    border-color: var(--ochre);
+  }
+
+  .phase-list{ display:flex; flex-direction: column; gap: 18px; }
+  .phase-card{
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    scroll-margin-top: 16px;
+  }
+  .phase-head{
+    display:flex; align-items: baseline; justify-content: space-between;
+    flex-wrap: wrap; gap: 8px 16px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 12px;
+  }
+  .phase-age{
+    font-family: var(--font-mono);
+    color: var(--ochre);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+  }
+  .phase-name{
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 600;
+    margin: 2px 0 0;
+  }
+  .phase-tag{
+    font-size: 12px;
+    color: var(--cream-dim);
+    font-style: italic;
+  }
+  .cat-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+  }
+  .cat h4{
+    margin: 0 0 8px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--teal-soft);
+    font-weight: 700;
+  }
+  .cat ul{ margin:0; padding-left: 18px; }
+  .cat li{ margin-bottom: 6px; font-size: 14.5px; color: var(--cream); }
+  .cat li::marker{ color: var(--ochre); }
+
+  /* ---------- FIRST AID ---------- */
+  .aid-warning{
+    background: var(--alert-soft);
+    border: 1px solid rgba(196,62,62,0.4);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    font-size: 14px;
+    margin-bottom: 22px;
+    display:flex; gap: 12px; align-items:flex-start;
+  }
+  .aid-warning strong{ color: #ef8080; }
+
+  .age-tabs{
+    display:flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 22px;
+  }
+  .age-tab{
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    color: var(--cream-dim);
+    padding: 9px 16px;
+    border-radius: 999px;
+    font-size: 13.5px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+  }
+  .age-tab.active{
+    background: var(--teal);
+    border-color: var(--teal);
+    color: var(--cream);
+  }
+
+  .aid-list{ display:flex; flex-direction:column; gap: 12px; }
+  .aid-card{
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .aid-card summary{
+    list-style: none;
+    cursor: pointer;
+    padding: 16px 20px;
+    display:flex; align-items:center; justify-content: space-between;
+    font-weight: 600;
+    font-size: 16px;
+    font-family: var(--font-display);
+  }
+  .aid-card summary::-webkit-details-marker{ display:none; }
+  .aid-card summary .plus{
+    font-family: var(--font-mono);
+    color: var(--ochre);
+    font-size: 20px;
+    transition: transform .15s ease;
+  }
+  .aid-card[open] summary .plus{ transform: rotate(45deg); }
+  .aid-body{
+    padding: 0 20px 20px;
+    border-top: 1px solid var(--line);
+  }
+  .aid-body h5{
+    font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    color: var(--ochre); margin: 16px 0 8px;
+  }
+  .aid-body ol, .aid-body ul{ margin: 0; padding-left: 20px; }
+  .aid-body li{ margin-bottom: 6px; font-size: 14.5px; }
+  .aid-emergency{
+    margin-top: 14px;
+    background: var(--alert-soft);
+    border-left: 3px solid var(--alert);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+  }
+
+  footer{
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    color: var(--cream-dim);
+    font-size: 12.5px;
+    font-family: var(--font-mono);
+  }
+
+  @media (max-width: 640px){
+    .phases-layout{ grid-template-columns: 1fr; }
+    .ruler{
+      position: static;
+      flex-direction: row;
+      overflow-x: auto;
+      width: 100%;
+      padding-bottom: 6px;
+    }
+    .ruler .beam{ display:none; }
+    .ruler-tick{ flex: 0 0 auto; margin: 0 4px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="brand">
+      <span class="mark">ELTERNRATGEBER</span>
+    </div>
+    <h1 class="title">MEILENSTEIN</h1>
+    <p class="subtitle">Entwicklungsphasen von der Geburt bis zur Pubertät – nach Alter geordnet, nach Verhalten durchsuchbar, mit Erste-Hilfe-Maßnahmen für den Ernstfall.</p>
+
+    <div class="searchbox">
+      <span class="icon">SUCHE</span>
+      <input id="search-input" type="text" placeholder="z. B. „wirft Sachen“, „Trotzanfall“, „beißt“, „Fieber“ …" autocomplete="off">
+    </div>
+    <div class="search-hint" id="search-hint">Stichwort eingeben – Treffer aus allen Phasen werden hier angezeigt.</div>
+    <div id="search-results"></div>
+  </header>
+
+  <nav class="tabbar">
+    <button class="tab-btn active" data-view="phases">Entwicklungsphasen</button>
+    <button class="tab-btn" data-view="aid">Erste Hilfe</button>
+  </nav>
+
+  <section id="view-phases" class="view active">
+    <div class="phases-layout">
+      <div class="ruler" id="ruler"></div>
+      <div class="phase-list" id="phase-list"></div>
+    </div>
+  </section>
+
+  <section id="view-aid" class="view">
+    <div class="aid-warning">
+      <span>⚠</span>
+      <div><strong>Im Zweifel immer zuerst 112 wählen.</strong> Diese Übersicht ersetzt keinen Erste-Hilfe-Kurs am Kind/Säugling und keine ärztliche Behandlung. Sie hilft, in der Aufregung des Moments den Kopf zu behalten.</div>
+    </div>
+    <div class="age-tabs" id="age-tabs"></div>
+    <div class="aid-list" id="aid-list"></div>
+  </section>
+
+  <footer>MEILENSTEIN · Elternratgeber · offline-fähig · keine Datenübertragung</footer>
+</div>
+
+<script>
+/* =========================================================
+   DATA: Entwicklungsphasen
+========================================================= */
+const PHASES = [
+  { id:'p0', ageLabel:'0–3 Mon.', ageRange:'0–3 Monate', name:'Neugeborenes', tag:'Ankommen & Bindung',
+    cats:{
+      'Körper & Motorik':['Greifreflex vorhanden, Hand nicht bewusst steuerbar','Kopf kann noch nicht selbst gehalten werden','Strampeln als Reaktion auf Reize','fixiert Gesichter aus 20–30 cm Entfernung'],
+      'Sprache & Denken':['Schreien als einzige Kommunikationsform','unterscheidet vertraute Stimmen, v. a. der Mutter','Schreckreaktion (Moro-Reflex) bei lauten Geräuschen'],
+      'Verhalten & Gefühle':['Schlaf-Wach-Rhythmus noch ungeordnet, viele kurze Schlafphasen','Bindungsaufbau über Nähe, Geruch und Blickkontakt','erstes echtes soziales Lächeln ab ca. 6.–8. Woche']
+    }},
+  { id:'p1', ageLabel:'3–6 Mon.', ageRange:'3–6 Monate', name:'Baby', tag:'Entdecken beginnt',
+    cats:{
+      'Körper & Motorik':['Kopfkontrolle wird sicher','greift gezielt nach Gegenständen','dreht sich von Bauch- auf Rückenlage','steckt zunehmend alles in den Mund (orale Erkundung)'],
+      'Sprache & Denken':['erstes Lallen mit Silben wie „ba“, „ga“','lacht laut und ausdrucksstark','reagiert erkennbar auf den eigenen Namen'],
+      'Verhalten & Gefühle':['erste Anzeichen von Fremdeln bahnen sich an','zeigt deutliche Freude bei bekannten Personen','Schlafrhythmus wird regelmäßiger']
+    }},
+  { id:'p2', ageLabel:'6–9 Mon.', ageRange:'6–9 Monate', name:'Baby', tag:'Mobilität & Ursache-Wirkung',
+    cats:{
+      'Körper & Motorik':['sitzt frei','robbt oder krabbelt','entwickelt den Pinzettengriff','erste Zähne brechen durch'],
+      'Sprache & Denken':['verdoppelt Silben („mama“, „dada“) noch ohne feste Bedeutung','versteht einfache Worte wie „Nein“','reagiert stark auf Tonfall'],
+      'Verhalten & Gefühle':['deutliches Fremdeln gegenüber Unbekannten','beginnende Trennungsangst','wirft und lässt Gegenstände absichtlich fallen, um Ursache-Wirkung zu testen','sucht versteckte Gegenstände (Objektpermanenz entwickelt sich)']
+    }},
+  { id:'p3', ageLabel:'9–12 Mon.', ageRange:'9–12 Monate', name:'Baby', tag:'Aufrichten & erste Worte',
+    cats:{
+      'Körper & Motorik':['zieht sich zum Stehen hoch','macht erste Schritte am Möbel entlang','kann Gegenstände gezielt loslassen und übergeben'],
+      'Sprache & Denken':['erstes bewusstes Wort möglich','versteht deutlich mehr, als es selbst sprechen kann','winkt „Tschüss“, zeigt auf Dinge'],
+      'Verhalten & Gefühle':['starke Bindung an die Hauptbezugsperson','Trennungsangst auf dem Höhepunkt','ahmt Alltagshandlungen nach','erste kleine Ansätze von Willensdurchsetzung']
+    }},
+  { id:'p4', ageLabel:'1–2 J.', ageRange:'1–2 Jahre', name:'Kleinkind', tag:'Laufen & erste Grenzen',
+    cats:{
+      'Körper & Motorik':['läuft frei','steigt Treppen mit Festhalten','kritzelt mit Stift','stapelt 2–3 Bauklötze'],
+      'Sprache & Denken':['Wortschatz wächst rasant, bis zu ca. 50 Wörter','erste Zweiwortsätze gegen Ende der Phase („Mama da“)','benennt Körperteile auf Nachfrage'],
+      'Verhalten & Gefühle':['spielt eher parallel als gemeinsam mit anderen Kindern','erste Trotzanfälle treten auf','wirft, schüttet und stapelt gerne als bevorzugte Erkundungsform – das ist normal','ausgeprägter Bewegungsdrang','erste bewusste „Nein“-Phase']
+    }},
+  { id:'p5', ageLabel:'2–3 J.', ageRange:'2–3 Jahre', name:'Kleinkind', tag:'Autonomie- & Trotzphase',
+    cats:{
+      'Körper & Motorik':['rennt, springt, hüpft auf der Stelle','isst zunehmend selbstständig mit Löffel/Gabel','Sauberkeitsentwicklung beginnt'],
+      'Sprache & Denken':['bildet Drei- bis Mehrwortsätze','„Warum“-Fragen beginnen','benutzt „Ich“ bewusst','Wortschatz etwa 200–1000 Wörter'],
+      'Verhalten & Gefühle':['heftige Wutausbrüche typisch (Trotz-/Autonomiephase)','starkes „Ich selbst!“-Bedürfnis','wirft, haut oder beißt bei Frustration – Ausdruck fehlender Impulskontrolle, kein Erziehungsfehler','entwickelt erste gemeinsame Spielsequenzen statt reinem Parallelspiel','Ängste vor Trennung oder Dunkelheit möglich']
+    }},
+  { id:'p6', ageLabel:'3–4 J.', ageRange:'3–4 Jahre', name:'Kindergartenkind', tag:'Rollenspiel & Fantasie',
+    cats:{
+      'Körper & Motorik':['klettert sicherer','fährt Dreirad','malt Kreise','zieht sich teilweise selbst an'],
+      'Sprache & Denken':['bildet komplexere Sätze inkl. Vergangenheitsform','stellt viele Fragen','versteht Mehrzahlbildung'],
+      'Verhalten & Gefühle':['beginnt Rollenspiele („Als-ob“-Spiel)','erste echte Freundschaften','Regelverständnis wächst langsam','Trotzanfälle werden seltener, Frustrationstoleranz aber weiterhin gering','mag feste Rituale und Wiederholung als Sicherheit']
+    }},
+  { id:'p7', ageLabel:'4–6 J.', ageRange:'4–6 Jahre', name:'Kindergartenkind', tag:'Regeln & Gruppe',
+    cats:{
+      'Körper & Motorik':['hüpft sicher auf einem Bein','fängt und wirft Bälle gezielt','schneidet mit der Schere','malt Personen mit Details'],
+      'Sprache & Denken':['Grammatik wird komplexer','erzählt zusammenhängende Geschichten','Wortschatz ca. 1500–2000 Wörter'],
+      'Verhalten & Gefühle':['spielt Regel- und Gruppenspiele','Freundschaften werden wichtiger','„Warum“-Phase auf dem Höhepunkt','entwickelt Verständnis von gerecht/ungerecht','Angeberei und Übertreibungen sind normal','erste Anzeichen von Schulreife']
+    }},
+  { id:'p8', ageLabel:'6–9 J.', ageRange:'6–9 Jahre', name:'Grundschulkind', tag:'Leistung & Peergroup',
+    cats:{
+      'Körper & Motorik':['Feinmotorik wird schreibsicher','koordiniert sich gut im Sport','Ausdauer nimmt zu'],
+      'Sprache & Denken':['logisches, konkretes Denken entwickelt sich','liest und schreibt','sammelt, ordnet, liebt klare Regeln'],
+      'Verhalten & Gefühle':['Peergroup gewinnt deutlich an Bedeutung','vergleicht sich stark mit anderen Kindern','erste „beste Freunde“','Wutausbrüche werden eher verbal statt körperlich','ausgeprägter Gerechtigkeitssinn','wachsende Selbstständigkeit im Alltag']
+    }},
+  { id:'p9', ageLabel:'9–12 J.', ageRange:'9–12 Jahre', name:'Schulkind', tag:'Abgrenzung beginnt',
+    cats:{
+      'Körper & Motorik':['möglicher erster Wachstumsschub','motorisch geübt und sicher','bei manchen Kindern erste körperliche Vorpubertätszeichen'],
+      'Sprache & Denken':['abstrakteres Denken beginnt sich zu entwickeln','versteht Ironie und Humor','hinterfragt Regeln zunehmend kritisch'],
+      'Verhalten & Gefühle':['starke Orientierung an Gleichaltrigen','erste bewusste Abgrenzung von den Eltern','Stimmungsschwankungen können beginnen','wachsendes Interesse an eigener Identität','Gruppenzugehörigkeit ist sehr wichtig']
+    }},
+  { id:'p10', ageLabel:'12–14 J.', ageRange:'12–14 Jahre', name:'Vorpubertät', tag:'Körper verändert sich',
+    cats:{
+      'Körper & Motorik':['hormonelle Veränderungen setzen ein','körperliches Wachstum beschleunigt sich','erste sichtbare pubertäre Merkmale bei vielen'],
+      'Sprache & Denken':['abstraktes und hypothetisches Denken reift','entwickelt eigene Wertvorstellungen'],
+      'Verhalten & Gefühle':['Rückzug aus dem Familienleben nimmt zu','verstärkte Stimmungsschwankungen','starkes Autonomiebestreben, ähnlich einer „zweiten Trotzphase“','starke Beeinflussung durch die Peergroup','beginnende Identitätssuche']
+    }},
+  { id:'p11', ageLabel:'14–16 J.', ageRange:'14–16 Jahre', name:'Pubertät', tag:'Ablösung & Identität',
+    cats:{
+      'Körper & Motorik':['Pubertät in vollem Gange','körperliche Reife schreitet deutlich voran','Schlafbedürfnis verschiebt sich nach spät'],
+      'Sprache & Denken':['reflektiertes, abstraktes Denken','entwickelt eigene Weltanschauung','beschäftigt sich mit Zukunftsfragen'],
+      'Verhalten & Gefühle':['Ablösung von den Eltern als zentrale Entwicklungsaufgabe','erhöhte Risikobereitschaft','starke Emotionalität, teils sprunghaft','Freundschaften und erste Beziehungen werden zentral','Identitäts- und Wertekrisen sind ein normaler Teil dieser Phase']
+    }}
+];
+
+/* =========================================================
+   DATA: Erste Hilfe
+========================================================= */
+const AGE_GROUPS = [
+  { id:'infant', label:'Säugling (0–1 J.)' },
+  { id:'toddler', label:'Kleinkind (1–3 J.)' },
+  { id:'kita', label:'Kindergartenkind (3–6 J.)' },
+  { id:'school', label:'Schulkind (6–12 J.)' },
+  { id:'teen', label:'Jugendliche (12–16 J.)' }
+];
+
+const FIRST_AID = [
+  { id:'fever', title:'Fieber', ages:['infant','toddler','kita','school','teen'],
+    steps:[
+      'Temperatur messen (rektal bei Säuglingen am zuverlässigsten)',
+      'leichte Kleidung, für ausreichend Flüssigkeit sorgen',
+      'Raumtemperatur angenehm kühl halten, nicht überdecken',
+      'Verhalten des Kindes beobachten – Fieberhöhe allein ist kein Notfallmaß, sondern der Gesamtzustand zählt'
+    ],
+    emergency:'Notruf/Arzt bei: Fieber unter 3 Monaten, sehr hohem Fieber, steifem Nacken, Ausschlag, Teilnahmslosigkeit, Atemnot oder wenn sich das Kind trotz fiebersenkender Maßnahmen deutlich verschlechtert.'
+  },
+  { id:'seizure', title:'Fieberkrampf', ages:['infant','toddler','kita'],
+    steps:[
+      'Ruhe bewahren, Zeit des Beginns merken',
+      'Kind vor Verletzungen schützen (harte/spitze Gegenstände entfernen)',
+      'nichts in den Mund stecken, nicht festhalten',
+      'nach Ende des Krampfs in stabile Seitenlage bringen'
+    ],
+    emergency:'Immer 112 rufen bei einem ersten Fieberkrampf, wenn der Krampf länger als 5 Minuten dauert, sich wiederholt oder das Kind danach nicht erwacht.'
+  },
+  { id:'choking-infant', title:'Verschlucken / Ersticken – Säugling', ages:['infant'],
+    steps:[
+      'Säugling bäuchlings auf den eigenen Unterarm legen, Kopf tiefer als der Körper, Kiefer stützen',
+      '5 feste Schläge zwischen die Schulterblätter mit dem Handballen',
+      'wenn erfolglos: auf den Rücken drehen, 5 Brustkompressionen wie bei der Reanimation (Brustbeinmitte, 2 Finger)',
+      'im Wechsel wiederholen, bis der Fremdkörper sich löst oder Rettungsdienst übernimmt'
+    ],
+    emergency:'Sofort 112 rufen (oder rufen lassen), während die Maßnahmen durchgeführt werden. Kein Heimlich-Handgriff bei Säuglingen unter 1 Jahr.'
+  },
+  { id:'choking-child', title:'Verschlucken / Ersticken – Kind', ages:['toddler','kita','school','teen'],
+    steps:[
+      'Kind nach vorne beugen lassen, 5 feste Schläge zwischen die Schulterblätter',
+      'wenn erfolglos: von hinten umfassen, Faust oberhalb des Bauchnabels, 5 kräftige Stöße nach innen/oben (Heimlich-Handgriff)',
+      'im Wechsel wiederholen, bis der Fremdkörper sich löst',
+      'bei Bewusstlosigkeit: auf den Boden legen und mit Reanimation beginnen'
+    ],
+    emergency:'Sofort 112 rufen. Bei Bewusstseinsverlust unverzüglich mit Herzdruckmassage beginnen.'
+  },
+  { id:'burn', title:'Verbrennung / Verbrühung', ages:['infant','toddler','kita','school','teen'],
+    steps:[
+      'betroffene Stelle sofort mit handwarmem/lauwarmem Wasser kühlen (ca. 10–15 Minuten, nicht eiskalt)',
+      'Kleidung nur entfernen, wenn sie nicht an der Haut klebt',
+      'Wunde locker und steril abdecken, keine Hausmittel wie Mehl, Öl oder Zahnpasta verwenden',
+      'Kind warmhalten (Unterkühlungsgefahr bei großflächigem Kühlen)'
+    ],
+    emergency:'Notruf bei großflächigen Verbrennungen, Verbrennungen im Gesicht/an Gelenken/Genitalien, Blasenbildung bei kleinen Kindern oder Verdacht auf Atemwegsbeteiligung (z. B. nach Rauch/heißem Dampf).'
+  },
+  { id:'fall', title:'Sturz / Kopfverletzung', ages:['infant','toddler','kita','school','teen'],
+    steps:[
+      'Kind beruhigen, Bewusstsein und Ansprechbarkeit prüfen',
+      'Beule kühlen (Kühlpack in ein Tuch gewickelt, nie direkt auf die Haut)',
+      'in den folgenden 24–48 Stunden auf Warnzeichen achten',
+      'bei Verdacht auf Wirbelsäulen-/Nackenverletzung Kind möglichst nicht bewegen, auf Rettungsdienst warten'
+    ],
+    emergency:'Notruf bei Bewusstlosigkeit (auch kurz), Erbrechen, ungleich großen Pupillen, zunehmender Schläfrigkeit, Krämpfen, Blut oder klarer Flüssigkeit aus Nase/Ohr, oder wenn sich der Zustand über Stunden verschlechtert.'
+  },
+  { id:'poison', title:'Vergiftung / Verschlucken von Substanzen', ages:['infant','toddler','kita','school'],
+    steps:[
+      'Reste der Substanz/Verpackung sicherstellen, um sie Rettungsdienst/Giftnotruf zu zeigen',
+      'kein Erbrechen herbeiführen, ohne fachliche Anweisung',
+      'Mund nach Rückständen absuchen, Reste vorsichtig entfernen',
+      'Giftnotrufzentrale kontaktieren und genaue Angaben zu Substanz, Menge und Zeitpunkt machen'
+    ],
+    emergency:'Bei Bewusstlosigkeit, Atemproblemen oder Krämpfen sofort 112. Ansonsten umgehend die örtliche Giftnotrufzentrale anrufen – die Nummer regional vorher heraussuchen und griffbereit haben.'
+  },
+  { id:'allergy', title:'Insektenstich / allergische Reaktion', ages:['infant','toddler','kita','school','teen'],
+    steps:[
+      'Stachel bei Bienenstich vorsichtig herausschieben (nicht mit der Pinzette quetschen)',
+      'Stelle kühlen',
+      'bei bekannter Allergie: mitgegebenes Notfallset gemäß ärztlicher Anweisung verwenden',
+      'Kind beobachten, beruhigen, beengende Kleidung öffnen'
+    ],
+    emergency:'Sofort 112 bei Schwellung im Mund-/Rachenraum, Atemnot, Kreislaufschwäche, Hautausschlag am ganzen Körper oder Stich im Mund-/Rachenbereich.'
+  },
+  { id:'nosebleed', title:'Nasenbluten', ages:['toddler','kita','school','teen'],
+    steps:[
+      'Kind aufrecht hinsetzen, Kopf leicht nach vorne neigen (nicht in den Nacken legen)',
+      'Nasenflügel für einige Minuten zusammendrücken',
+      'Nacken mit einem kühlen, feuchten Tuch kühlen',
+      'Kind zum Ausspucken von Blut anleiten statt Schlucken'
+    ],
+    emergency:'Arzt aufsuchen, wenn die Blutung nach 15–20 Minuten nicht steht, sehr häufig auftritt oder nach einer Kopfverletzung auftritt.'
+  },
+  { id:'tooth', title:'Zahnunfall', ages:['kita','school','teen'],
+    steps:[
+      'bei ausgeschlagenem bleibenden Zahn: Zahn an der Krone anfassen, nicht an der Wurzel',
+      'Zahn in spezielle Zahnrettungsbox oder ersatzweise kalte H-Milch legen',
+      'nicht abreiben oder desinfizieren',
+      'Milchzähne werden in der Regel nicht replantiert'
+    ],
+    emergency:'So schnell wie möglich (idealerweise innerhalb 30 Minuten) zum Zahnarzt oder in die Notaufnahme, besonders bei bleibenden Zähnen.'
+  },
+  { id:'unconscious', title:'Bewusstlosigkeit / keine normale Atmung', ages:['infant','toddler','kita','school','teen'],
+    steps:[
+      'Ansprechbarkeit prüfen, laut ansprechen, sanft anfassen',
+      'Atemwege freimachen, Atmung prüfen (sehen, hören, fühlen)',
+      'bei vorhandener Atmung: stabile Seitenlage, engmaschig überwachen',
+      'bei fehlender/nicht normaler Atmung: sofort mit Herzdruckmassage beginnen'
+    ],
+    emergency:'Sofort 112 – bei mehreren Helfenden parallel zur ersten Hilfe. Bei Säuglingen Herzdruckmassage mit 2 Fingern in Brustbeinmitte, bei älteren Kindern mit einer oder beiden Handballen, ca. 100–120/Minute. Eine Auffrischung in einem Erste-Hilfe-Kurs am Kind wird dringend empfohlen.'
+  }
+];
+
+/* =========================================================
+   RENDER: Entwicklungsphasen + Ruler
+========================================================= */
+const rulerEl = document.getElementById('ruler');
+const listEl = document.getElementById('phase-list');
+const beam = document.createElement('div');
+beam.className = 'beam';
+rulerEl.appendChild(beam);
+
+PHASES.forEach(p => {
+  const tick = document.createElement('div');
+  tick.className = 'ruler-tick';
+  tick.textContent = p.ageLabel;
+  tick.dataset.target = p.id;
+  tick.addEventListener('click', () => {
+    document.getElementById(p.id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  rulerEl.appendChild(tick);
+
+  const card = document.createElement('article');
+  card.className = 'phase-card';
+  card.id = p.id;
+
+  const head = document.createElement('div');
+  head.className = 'phase-head';
+  head.innerHTML = `
+    <div>
+      <div class="phase-age">${p.ageRange}</div>
+      <div class="phase-name">${p.name}</div>
+    </div>
+    <div class="phase-tag">${p.tag}</div>
+  `;
+  card.appendChild(head);
+
+  const grid = document.createElement('div');
+  grid.className = 'cat-grid';
+  Object.entries(p.cats).forEach(([catName, items]) => {
+    const catEl = document.createElement('div');
+    catEl.className = 'cat';
+    const ul = items.map(i => `<li>${i}</li>`).join('');
+    catEl.innerHTML = `<h4>${catName}</h4><ul>${ul}</ul>`;
+    grid.appendChild(catEl);
+  });
+  card.appendChild(grid);
+  listEl.appendChild(card);
+});
+
+/* highlight active ruler tick on scroll */
+const ticks = Array.from(document.querySelectorAll('.ruler-tick'));
+const cards = Array.from(document.querySelectorAll('.phase-card'));
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      ticks.forEach(t => t.classList.toggle('active', t.dataset.target === e.target.id));
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+cards.forEach(c => io.observe(c));
+
+/* =========================================================
+   RENDER: Erste Hilfe
+========================================================= */
+const ageTabsEl = document.getElementById('age-tabs');
+const aidListEl = document.getElementById('aid-list');
+let currentAgeFilter = 'all';
+
+const allTab = document.createElement('button');
+allTab.className = 'age-tab active';
+allTab.textContent = 'Alle Altersstufen';
+allTab.dataset.age = 'all';
+ageTabsEl.appendChild(allTab);
+
+AGE_GROUPS.forEach(g => {
+  const btn = document.createElement('button');
+  btn.className = 'age-tab';
+  btn.textContent = g.label;
+  btn.dataset.age = g.id;
+  ageTabsEl.appendChild(btn);
+});
+
+ageTabsEl.addEventListener('click', (e) => {
+  const btn = e.target.closest('.age-tab');
+  if (!btn) return;
+  currentAgeFilter = btn.dataset.age;
+  Array.from(ageTabsEl.children).forEach(c => c.classList.toggle('active', c === btn));
+  renderAid();
+});
+
+function renderAid(){
+  aidListEl.innerHTML = '';
+  const items = FIRST_AID.filter(a => currentAgeFilter === 'all' || a.ages.includes(currentAgeFilter));
+  if (items.length === 0){
+    aidListEl.innerHTML = '<p class="no-results">Für diese Altersstufe sind keine gesonderten Maßnahmen hinterlegt.</p>';
+    return;
+  }
+  items.forEach(a => {
+    const det = document.createElement('details');
+    det.className = 'aid-card';
+    const stepsHtml = a.steps.map(s => `<li>${s}</li>`).join('');
+    det.innerHTML = `
+      <summary>${a.title}<span class="plus">+</span></summary>
+      <div class="aid-body">
+        <h5>Sofortmaßnahmen</h5>
+        <ol>${stepsHtml}</ol>
+        <div class="aid-emergency"><strong>Notruf/Arzt, wenn:</strong> ${a.emergency}</div>
+      </div>
+    `;
+    aidListEl.appendChild(det);
+  });
+}
+renderAid();
+
+/* =========================================================
+   TABS: Phasen / Erste Hilfe
+========================================================= */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const target = btn.dataset.view;
+    document.getElementById('view-phases').classList.toggle('active', target === 'phases');
+    document.getElementById('view-aid').classList.toggle('active', target === 'aid');
+  });
+});
+
+/* =========================================================
+   SEARCH
+========================================================= */
+const searchIndex = [];
+PHASES.forEach(p => {
+  Object.entries(p.cats).forEach(([catName, items]) => {
+    items.forEach(text => {
+      searchIndex.push({ phaseId: p.id, ageRange: p.ageRange, phaseName: p.name, cat: catName, text });
+    });
+  });
+});
+// first aid entries are also searchable
+FIRST_AID.forEach(a => {
+  searchIndex.push({ phaseId: null, aidId: a.id, ageRange: a.ages.map(id => AGE_GROUPS.find(g=>g.id===id)?.label).filter(Boolean).join(', '), phaseName: 'Erste Hilfe', cat: a.title, text: a.emergency });
+  a.steps.forEach(s => {
+    searchIndex.push({ phaseId: null, aidId: a.id, ageRange: a.ages.map(id => AGE_GROUPS.find(g=>g.id===id)?.label).filter(Boolean).join(', '), phaseName: 'Erste Hilfe', cat: a.title, text: s });
+  });
+});
+
+function normalize(str){
+  return str.toLowerCase()
+    .replace(/ä/g,'a').replace(/ö/g,'o').replace(/ü/g,'u').replace(/ß/g,'ss');
+}
+
+const searchInput = document.getElementById('search-input');
+const resultsEl = document.getElementById('search-results');
+const hintEl = document.getElementById('search-hint');
+
+function highlight(text, query){
+  const idx = normalize(text).indexOf(query);
+  if (idx === -1) return text;
+  return text.slice(0, idx) + '<mark>' + text.slice(idx, idx + query.length) + '</mark>' + text.slice(idx + query.length);
+}
+
+searchInput.addEventListener('input', () => {
+  const raw = searchInput.value.trim();
+  if (raw.length < 2){
+    resultsEl.classList.remove('active');
+    resultsEl.innerHTML = '';
+    hintEl.style.display = 'block';
+    return;
+  }
+  hintEl.style.display = 'none';
+  const q = normalize(raw);
+  const matches = searchIndex.filter(item => normalize(item.text).includes(q) || normalize(item.cat).includes(q));
+
+  resultsEl.classList.add('active');
+  if (matches.length === 0){
+    resultsEl.innerHTML = '<div class="no-results">Keine Treffer. Versuch ein anderes Stichwort, z. B. „wirft“, „beißt“, „Fieber“, „Trotz“.</div>';
+    return;
+  }
+  resultsEl.innerHTML = '';
+  matches.slice(0, 20).forEach(m => {
+    const div = document.createElement('button');
+    div.className = 'result-item';
+    div.innerHTML = `<span class="r-age">${m.ageRange}</span><span class="r-cat">${m.phaseName} · ${m.cat}</span><div class="r-text">${highlight(m.text, q)}</div>`;
+    div.addEventListener('click', () => {
+      if (m.phaseId){
+        document.querySelector('.tab-btn[data-view="phases"]').click();
+        document.getElementById(m.phaseId).scrollIntoView({ behavior:'smooth', block:'start' });
+      } else if (m.aidId){
+        document.querySelector('.tab-btn[data-view="aid"]').click();
+        currentAgeFilter = 'all';
+        Array.from(ageTabsEl.children).forEach(c => c.classList.toggle('active', c.dataset.age==='all'));
+        renderAid();
+        setTimeout(() => {
+          const target = Array.from(document.querySelectorAll('.aid-card')).find(c => c.querySelector('summary').textContent.includes(m.cat));
+          if (target){ target.open = true; target.scrollIntoView({ behavior:'smooth', block:'start' }); }
+        }, 50);
+      }
+    });
+    resultsEl.appendChild(div);
+  });
+});
+
+/* =========================================================
+   PWA: service worker registration
+========================================================= */
+if ('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
