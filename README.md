@@ -4,8 +4,9 @@ Eine installierbare Progressive Web App (PWA) mit Entwicklungsphasen von der Geb
 
 ## Features
 
-- **Entwicklungsphasen (0–16 Jahre):** 12 Altersstufen mit Körper/Motorik, Sprache/Denken sowie Verhalten/Gefühle, navigierbar über ein "Wachstumslineal" am Bildschirmrand
-- **Stichwortsuche:** durchsucht alle Verhaltensweisen und Erste-Hilfe-Inhalte gleichzeitig (umlaut-tolerant), Treffer springen direkt zur passenden Stelle
+- **Entwicklungsphasen (0–16 Jahre):** 12 Altersstufen mit Körper/Motorik, Sprache/Denken, Verhalten/Gefühle sowie „Was du als Elternteil tun kannst“, navigierbar über ein "Wachstumslineal" am Bildschirmrand
+- **Essen & Essverhalten:** altersabhängige Themen von Stillen/Beikost bis Jugendliche, inkl. typischer Essensmuster, praktischer Tipps und konkreter Strategien, wenn ein Kind Essen ablehnt – filterbar nach Altersstufe
+- **Stichwortsuche:** durchsucht Entwicklungsphasen, Essverhalten und Erste-Hilfe-Inhalte gleichzeitig (umlaut-tolerant), Treffer springen direkt zur passenden Stelle
 - **Erste Hilfe nach Alter:** Sofortmaßnahmen zu Fieber, Verschlucken/Ersticken, Verbrennungen, Stürzen, Vergiftungen, Fieberkrampf, Bewusstlosigkeit u. a. – filterbar nach Säugling, Kleinkind, Kindergarten-, Schulkind und Jugendliche
 - **Offline-fähig:** Service Worker cached alle Inhalte lokal, keine Datenübertragung an einen Server
 - **Installierbar:** kann über den Browser als App auf Smartphone, Tablet oder Desktop installiert werden
@@ -20,7 +21,7 @@ meilenstein/
 └── icon.svg         # App-Icon
 ```
 
-Alle Inhalte (Entwicklungsphasen, Erste-Hilfe-Daten) liegen als JavaScript-Objekte direkt in `index.html` im Abschnitt `PHASES` bzw. `FIRST_AID` und lassen sich dort erweitern oder anpassen, ohne weitere Dateien zu berühren.
+Alle Inhalte (Entwicklungsphasen, Essverhalten, Erste-Hilfe-Daten) liegen als JavaScript-Objekte direkt in `index.html` im Abschnitt `PHASES`, `FOOD_TOPICS` bzw. `FIRST_AID` und lassen sich dort erweitern oder anpassen, ohne weitere Dateien zu berühren.
 
 ## Deployment (GitHub Pages)
 
@@ -31,9 +32,10 @@ Alle Inhalte (Entwicklungsphasen, Erste-Hilfe-Daten) liegen als JavaScript-Objek
 
 ## Inhalte erweitern
 
-- **Neue Altersphase:** in `PHASES` ein neues Objekt mit `id`, `ageLabel`, `ageRange`, `name`, `tag` und den drei Kategorien ergänzen
+- **Neue Altersphase:** in `PHASES` ein neues Objekt mit `id`, `ageLabel`, `ageRange`, `name`, `tag` und den vier Kategorien (inkl. „Was du als Elternteil tun kannst“) ergänzen
+- **Neues Essen-Thema:** in `FOOD_TOPICS` ein Objekt mit `id`, `title`, `ages` (betroffene Altersgruppen aus `FOOD_AGE_GROUPS`, oder `general: true` für altersübergreifende Themen), `typical`, `tips` und optional `refusal` ergänzen
 - **Neue Erste-Hilfe-Situation:** in `FIRST_AID` ein Objekt mit `id`, `title`, `ages` (betroffene Altersgruppen), `steps` und `emergency` ergänzen
-- Die Suche indiziert beide Datenquellen automatisch, keine zusätzliche Pflege nötig
+- Die Suche indiziert alle drei Datenquellen automatisch, keine zusätzliche Pflege nötig
 
 ## Hinweis
 

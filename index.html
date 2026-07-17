@@ -379,7 +379,7 @@
 
     <div class="searchbox">
       <span class="icon">SUCHE</span>
-      <input id="search-input" type="text" placeholder="z. B. „wirft Sachen“, „Trotzanfall“, „beißt“, „Fieber“ …" autocomplete="off">
+      <input id="search-input" type="text" placeholder="z. B. „wirft Sachen“, „Trotzanfall“, „isst nichts“, „Fieber“ …" autocomplete="off">
     </div>
     <div class="search-hint" id="search-hint">Stichwort eingeben – Treffer aus allen Phasen werden hier angezeigt.</div>
     <div id="search-results"></div>
@@ -387,6 +387,7 @@
 
   <nav class="tabbar">
     <button class="tab-btn active" data-view="phases">Entwicklungsphasen</button>
+    <button class="tab-btn" data-view="food">Essen & Essverhalten</button>
     <button class="tab-btn" data-view="aid">Erste Hilfe</button>
   </nav>
 
@@ -395,6 +396,11 @@
       <div class="ruler" id="ruler"></div>
       <div class="phase-list" id="phase-list"></div>
     </div>
+  </section>
+
+  <section id="view-food" class="view">
+    <div class="age-tabs" id="food-age-tabs"></div>
+    <div class="aid-list" id="food-list"></div>
   </section>
 
   <section id="view-aid" class="view">
@@ -418,73 +424,85 @@ const PHASES = [
     cats:{
       'Körper & Motorik':['Greifreflex vorhanden, Hand nicht bewusst steuerbar','Kopf kann noch nicht selbst gehalten werden','Strampeln als Reaktion auf Reize','fixiert Gesichter aus 20–30 cm Entfernung'],
       'Sprache & Denken':['Schreien als einzige Kommunikationsform','unterscheidet vertraute Stimmen, v. a. der Mutter','Schreckreaktion (Moro-Reflex) bei lauten Geräuschen'],
-      'Verhalten & Gefühle':['Schlaf-Wach-Rhythmus noch ungeordnet, viele kurze Schlafphasen','Bindungsaufbau über Nähe, Geruch und Blickkontakt','erstes echtes soziales Lächeln ab ca. 6.–8. Woche']
+      'Verhalten & Gefühle':['Schlaf-Wach-Rhythmus noch ungeordnet, viele kurze Schlafphasen','Bindungsaufbau über Nähe, Geruch und Blickkontakt','erstes echtes soziales Lächeln ab ca. 6.–8. Woche'],
+      'Was du als Elternteil tun kannst':['Nähe, Blickkontakt und Körperkontakt schaffen Urvertrauen (Tragen, Stillen/Füttern, Hautkontakt)','zeitnah auf Schreien reagieren – das verwöhnt nicht, sondern baut Bindung auf','eigene Erschöpfung ernst nehmen und Unterstützung im Wochenbett organisieren','Rituale für Schlafenszeiten langsam und ohne Druck etablieren']
     }},
   { id:'p1', ageLabel:'3–6 Mon.', ageRange:'3–6 Monate', name:'Baby', tag:'Entdecken beginnt',
     cats:{
       'Körper & Motorik':['Kopfkontrolle wird sicher','greift gezielt nach Gegenständen','dreht sich von Bauch- auf Rückenlage','steckt zunehmend alles in den Mund (orale Erkundung)'],
       'Sprache & Denken':['erstes Lallen mit Silben wie „ba“, „ga“','lacht laut und ausdrucksstark','reagiert erkennbar auf den eigenen Namen'],
-      'Verhalten & Gefühle':['erste Anzeichen von Fremdeln bahnen sich an','zeigt deutliche Freude bei bekannten Personen','Schlafrhythmus wird regelmäßiger']
+      'Verhalten & Gefühle':['erste Anzeichen von Fremdeln bahnen sich an','zeigt deutliche Freude bei bekannten Personen','Schlafrhythmus wird regelmäßiger'],
+      'Was du als Elternteil tun kannst':['viel sprechen, singen und Blickkontakt halten, auch wenn noch keine Antwort kommt','Bauchlage spielerisch als „Tummy Time“ einbauen, um Kopf- und Nackenmuskulatur zu stärken','Reize dosieren und auf Übermüdungssignale achten','erste feste Alltagsstruktur bei Schlafen, Essen und Wachzeiten einführen']
     }},
   { id:'p2', ageLabel:'6–9 Mon.', ageRange:'6–9 Monate', name:'Baby', tag:'Mobilität & Ursache-Wirkung',
     cats:{
       'Körper & Motorik':['sitzt frei','robbt oder krabbelt','entwickelt den Pinzettengriff','erste Zähne brechen durch'],
       'Sprache & Denken':['verdoppelt Silben („mama“, „dada“) noch ohne feste Bedeutung','versteht einfache Worte wie „Nein“','reagiert stark auf Tonfall'],
-      'Verhalten & Gefühle':['deutliches Fremdeln gegenüber Unbekannten','beginnende Trennungsangst','wirft und lässt Gegenstände absichtlich fallen, um Ursache-Wirkung zu testen','sucht versteckte Gegenstände (Objektpermanenz entwickelt sich)']
+      'Verhalten & Gefühle':['deutliches Fremdeln gegenüber Unbekannten','beginnende Trennungsangst','wirft und lässt Gegenstände absichtlich fallen, um Ursache-Wirkung zu testen','sucht versteckte Gegenstände (Objektpermanenz entwickelt sich)'],
+      'Was du als Elternteil tun kannst':['Fremdeln nicht als Rückschritt werten, sondern als gesunden Bindungsnachweis akzeptieren','Ursache-Wirkung-Spiele unterstützen (Dinge herunterfallen lassen, Becherstapel)','die Umgebung kindersicher gestalten, da die Mobilität zunimmt','feste Bezugspersonen einplanen und Trennungen vorher behutsam ankündigen']
     }},
   { id:'p3', ageLabel:'9–12 Mon.', ageRange:'9–12 Monate', name:'Baby', tag:'Aufrichten & erste Worte',
     cats:{
       'Körper & Motorik':['zieht sich zum Stehen hoch','macht erste Schritte am Möbel entlang','kann Gegenstände gezielt loslassen und übergeben'],
       'Sprache & Denken':['erstes bewusstes Wort möglich','versteht deutlich mehr, als es selbst sprechen kann','winkt „Tschüss“, zeigt auf Dinge'],
-      'Verhalten & Gefühle':['starke Bindung an die Hauptbezugsperson','Trennungsangst auf dem Höhepunkt','ahmt Alltagshandlungen nach','erste kleine Ansätze von Willensdurchsetzung']
+      'Verhalten & Gefühle':['starke Bindung an die Hauptbezugsperson','Trennungsangst auf dem Höhepunkt','ahmt Alltagshandlungen nach','erste kleine Ansätze von Willensdurchsetzung'],
+      'Was du als Elternteil tun kannst':['Laufenlernen unterstützen, aber nicht drängen – jedes Kind hat sein eigenes Tempo','auf Zeigen und Gesten eingehen und benennen, worauf das Kind zeigt','Trennungsangst ernst nehmen, kurze Abschiede ritualisieren statt heimlich zu verschwinden','Nachahmung fördern durch gemeinsames Spiel mit Alltagsgegenständen']
     }},
   { id:'p4', ageLabel:'1–2 J.', ageRange:'1–2 Jahre', name:'Kleinkind', tag:'Laufen & erste Grenzen',
     cats:{
       'Körper & Motorik':['läuft frei','steigt Treppen mit Festhalten','kritzelt mit Stift','stapelt 2–3 Bauklötze'],
       'Sprache & Denken':['Wortschatz wächst rasant, bis zu ca. 50 Wörter','erste Zweiwortsätze gegen Ende der Phase („Mama da“)','benennt Körperteile auf Nachfrage'],
-      'Verhalten & Gefühle':['spielt eher parallel als gemeinsam mit anderen Kindern','erste Trotzanfälle treten auf','wirft, schüttet und stapelt gerne als bevorzugte Erkundungsform – das ist normal','ausgeprägter Bewegungsdrang','erste bewusste „Nein“-Phase']
+      'Verhalten & Gefühle':['spielt eher parallel als gemeinsam mit anderen Kindern','erste Trotzanfälle treten auf','wirft, schüttet und stapelt gerne als bevorzugte Erkundungsform – das ist normal','ausgeprägter Bewegungsdrang','erste bewusste „Nein“-Phase'],
+      'Was du als Elternteil tun kannst':['Werfen und Schütten in sichere Bahnen lenken (Ball, Wasserspiele) statt komplett zu verbieten','klare, kurze Grenzen setzen und dabei ruhig und konsequent bleiben','Handlungen und Gefühle des Kindes sprachlich begleiten','ausreichend Bewegungsfreiraum ermöglichen']
     }},
   { id:'p5', ageLabel:'2–3 J.', ageRange:'2–3 Jahre', name:'Kleinkind', tag:'Autonomie- & Trotzphase',
     cats:{
       'Körper & Motorik':['rennt, springt, hüpft auf der Stelle','isst zunehmend selbstständig mit Löffel/Gabel','Sauberkeitsentwicklung beginnt'],
       'Sprache & Denken':['bildet Drei- bis Mehrwortsätze','„Warum“-Fragen beginnen','benutzt „Ich“ bewusst','Wortschatz etwa 200–1000 Wörter'],
-      'Verhalten & Gefühle':['heftige Wutausbrüche typisch (Trotz-/Autonomiephase)','starkes „Ich selbst!“-Bedürfnis','wirft, haut oder beißt bei Frustration – Ausdruck fehlender Impulskontrolle, kein Erziehungsfehler','entwickelt erste gemeinsame Spielsequenzen statt reinem Parallelspiel','Ängste vor Trennung oder Dunkelheit möglich']
+      'Verhalten & Gefühle':['heftige Wutausbrüche typisch (Trotz-/Autonomiephase)','starkes „Ich selbst!“-Bedürfnis','wirft, haut oder beißt bei Frustration – Ausdruck fehlender Impulskontrolle, kein Erziehungsfehler','entwickelt erste gemeinsame Spielsequenzen statt reinem Parallelspiel','Ängste vor Trennung oder Dunkelheit möglich'],
+      'Was du als Elternteil tun kannst':['Wutausbrüche als Überforderung des Nervensystems verstehen, nicht als Angriff','in der Eskalation ruhig und präsent bleiben, erst nach der Beruhigung sprechen','echte Wahlmöglichkeiten anbieten („blaue oder rote Jacke?“), um das Autonomiebedürfnis zu bedienen','Grenzen liebevoll, aber konsequent halten']
     }},
   { id:'p6', ageLabel:'3–4 J.', ageRange:'3–4 Jahre', name:'Kindergartenkind', tag:'Rollenspiel & Fantasie',
     cats:{
       'Körper & Motorik':['klettert sicherer','fährt Dreirad','malt Kreise','zieht sich teilweise selbst an'],
       'Sprache & Denken':['bildet komplexere Sätze inkl. Vergangenheitsform','stellt viele Fragen','versteht Mehrzahlbildung'],
-      'Verhalten & Gefühle':['beginnt Rollenspiele („Als-ob“-Spiel)','erste echte Freundschaften','Regelverständnis wächst langsam','Trotzanfälle werden seltener, Frustrationstoleranz aber weiterhin gering','mag feste Rituale und Wiederholung als Sicherheit']
+      'Verhalten & Gefühle':['beginnt Rollenspiele („Als-ob“-Spiel)','erste echte Freundschaften','Regelverständnis wächst langsam','Trotzanfälle werden seltener, Frustrationstoleranz aber weiterhin gering','mag feste Rituale und Wiederholung als Sicherheit'],
+      'Was du als Elternteil tun kannst':['Rollenspiele aktiv begleiten oder einfach Raum dafür schaffen','Rituale und Wiederholungen als Sicherheit respektieren, nicht als „nervig“ abtun','Fragen geduldig beantworten, auch wenn es viele sind','erste soziale Konflikte mit anderen Kindern begleiten statt sofort zu lösen']
     }},
   { id:'p7', ageLabel:'4–6 J.', ageRange:'4–6 Jahre', name:'Kindergartenkind', tag:'Regeln & Gruppe',
     cats:{
       'Körper & Motorik':['hüpft sicher auf einem Bein','fängt und wirft Bälle gezielt','schneidet mit der Schere','malt Personen mit Details'],
       'Sprache & Denken':['Grammatik wird komplexer','erzählt zusammenhängende Geschichten','Wortschatz ca. 1500–2000 Wörter'],
-      'Verhalten & Gefühle':['spielt Regel- und Gruppenspiele','Freundschaften werden wichtiger','„Warum“-Phase auf dem Höhepunkt','entwickelt Verständnis von gerecht/ungerecht','Angeberei und Übertreibungen sind normal','erste Anzeichen von Schulreife']
+      'Verhalten & Gefühle':['spielt Regel- und Gruppenspiele','Freundschaften werden wichtiger','„Warum“-Phase auf dem Höhepunkt','entwickelt Verständnis von gerecht/ungerecht','Angeberei und Übertreibungen sind normal','erste Anzeichen von Schulreife'],
+      'Was du als Elternteil tun kannst':['Regelspiele gemeinsam spielen und Verlieren begleiten','den Gerechtigkeitssinn ernst nehmen und Entscheidungen erklären','Vorlesen und Gespräche fördern Sprache und Wortschatz','Schulvorbereitung spielerisch unterstützen, ohne Leistungsdruck aufzubauen']
     }},
   { id:'p8', ageLabel:'6–9 J.', ageRange:'6–9 Jahre', name:'Grundschulkind', tag:'Leistung & Peergroup',
     cats:{
       'Körper & Motorik':['Feinmotorik wird schreibsicher','koordiniert sich gut im Sport','Ausdauer nimmt zu'],
       'Sprache & Denken':['logisches, konkretes Denken entwickelt sich','liest und schreibt','sammelt, ordnet, liebt klare Regeln'],
-      'Verhalten & Gefühle':['Peergroup gewinnt deutlich an Bedeutung','vergleicht sich stark mit anderen Kindern','erste „beste Freunde“','Wutausbrüche werden eher verbal statt körperlich','ausgeprägter Gerechtigkeitssinn','wachsende Selbstständigkeit im Alltag']
+      'Verhalten & Gefühle':['Peergroup gewinnt deutlich an Bedeutung','vergleicht sich stark mit anderen Kindern','erste „beste Freunde“','Wutausbrüche werden eher verbal statt körperlich','ausgeprägter Gerechtigkeitssinn','wachsende Selbstständigkeit im Alltag'],
+      'Was du als Elternteil tun kannst':['Freundschaften und Peergroup wertschätzen statt abzuwerten','bei Konflikten erst zuhören, bevor man eingreift','Selbstständigkeit im Alltag fördern (Hausaufgaben, kleine Aufgaben im Haushalt)','das Gerechtigkeitsempfinden als Gesprächsanlass nutzen']
     }},
   { id:'p9', ageLabel:'9–12 J.', ageRange:'9–12 Jahre', name:'Schulkind', tag:'Abgrenzung beginnt',
     cats:{
       'Körper & Motorik':['möglicher erster Wachstumsschub','motorisch geübt und sicher','bei manchen Kindern erste körperliche Vorpubertätszeichen'],
       'Sprache & Denken':['abstrakteres Denken beginnt sich zu entwickeln','versteht Ironie und Humor','hinterfragt Regeln zunehmend kritisch'],
-      'Verhalten & Gefühle':['starke Orientierung an Gleichaltrigen','erste bewusste Abgrenzung von den Eltern','Stimmungsschwankungen können beginnen','wachsendes Interesse an eigener Identität','Gruppenzugehörigkeit ist sehr wichtig']
+      'Verhalten & Gefühle':['starke Orientierung an Gleichaltrigen','erste bewusste Abgrenzung von den Eltern','Stimmungsschwankungen können beginnen','wachsendes Interesse an eigener Identität','Gruppenzugehörigkeit ist sehr wichtig'],
+      'Was du als Elternteil tun kannst':['Abgrenzung zulassen, ohne sich zurückgewiesen zu fühlen','verlässlicher Ansprechpartner bleiben, auch wenn weniger gesucht','Medienzeit und Peergroup-Einflüsse begleiten statt nur zu kontrollieren','eigene Meinungen und Kritik des Kindes ernst nehmen']
     }},
   { id:'p10', ageLabel:'12–14 J.', ageRange:'12–14 Jahre', name:'Vorpubertät', tag:'Körper verändert sich',
     cats:{
       'Körper & Motorik':['hormonelle Veränderungen setzen ein','körperliches Wachstum beschleunigt sich','erste sichtbare pubertäre Merkmale bei vielen'],
       'Sprache & Denken':['abstraktes und hypothetisches Denken reift','entwickelt eigene Wertvorstellungen'],
-      'Verhalten & Gefühle':['Rückzug aus dem Familienleben nimmt zu','verstärkte Stimmungsschwankungen','starkes Autonomiebestreben, ähnlich einer „zweiten Trotzphase“','starke Beeinflussung durch die Peergroup','beginnende Identitätssuche']
+      'Verhalten & Gefühle':['Rückzug aus dem Familienleben nimmt zu','verstärkte Stimmungsschwankungen','starkes Autonomiebestreben, ähnlich einer „zweiten Trotzphase“','starke Beeinflussung durch die Peergroup','beginnende Identitätssuche'],
+      'Was du als Elternteil tun kannst':['Privatsphäre respektieren und gleichzeitig ansprechbar bleiben','Diskussionen als Übung für eigene Meinungsbildung sehen, nicht als Widerstand','beim eigenen Umgang mit Emotionen Vorbild sein','wenige, klare Regeln vereinbaren und diese konsequent einhalten']
     }},
   { id:'p11', ageLabel:'14–16 J.', ageRange:'14–16 Jahre', name:'Pubertät', tag:'Ablösung & Identität',
     cats:{
       'Körper & Motorik':['Pubertät in vollem Gange','körperliche Reife schreitet deutlich voran','Schlafbedürfnis verschiebt sich nach spät'],
       'Sprache & Denken':['reflektiertes, abstraktes Denken','entwickelt eigene Weltanschauung','beschäftigt sich mit Zukunftsfragen'],
-      'Verhalten & Gefühle':['Ablösung von den Eltern als zentrale Entwicklungsaufgabe','erhöhte Risikobereitschaft','starke Emotionalität, teils sprunghaft','Freundschaften und erste Beziehungen werden zentral','Identitäts- und Wertekrisen sind ein normaler Teil dieser Phase']
+      'Verhalten & Gefühle':['Ablösung von den Eltern als zentrale Entwicklungsaufgabe','erhöhte Risikobereitschaft','starke Emotionalität, teils sprunghaft','Freundschaften und erste Beziehungen werden zentral','Identitäts- und Wertekrisen sind ein normaler Teil dieser Phase'],
+      'Was du als Elternteil tun kannst':['Autonomie zunehmend übertragen, mit wachsender Verantwortung','im Hintergrund verfügbar bleiben, ohne dich aufzudrängen','über Risiken sprechen statt nur zu verbieten','die Beziehung aktiv pflegen – gemeinsame Zeit anbieten, nicht einfordern']
     }}
 ];
 
@@ -602,6 +620,61 @@ const FIRST_AID = [
 ];
 
 /* =========================================================
+   DATA: Essen & Essverhalten
+========================================================= */
+const FOOD_AGE_GROUPS = [
+  { id:'stillen', label:'0–6 Monate' },
+  { id:'beikost', label:'6–12 Monate' },
+  { id:'kleinkind', label:'1–3 Jahre' },
+  { id:'kita', label:'3–6 Jahre' },
+  { id:'schulkind', label:'6–12 Jahre' },
+  { id:'jugend', label:'12–16 Jahre' }
+];
+
+const FOOD_TOPICS = [
+  { id:'milch', title:'Stillen / Flasche', ages:['stillen'],
+    typical:['Muttermilch oder Säuglingsmilch ist bis ca. 6 Monate alleinige Nahrung','Stillen bzw. Füttern nach Bedarf statt nach starrem Zeitplan','Trinkmengen schwanken von Tag zu Tag, das ist normal'],
+    tips:['Hunger- und Sättigungssignale respektieren statt Restmengen zu erzwingen','ruhige, störungsarme Umgebung beim Füttern schaffen','bei Stillproblemen frühzeitig Hebamme oder Stillberatung einbeziehen'],
+    refusal:['kurzfristige Trinkschwäche ist oft durch Zahnen, Schnupfen oder einen Wachstumsschub bedingt','kleinere, dafür häufigere Mahlzeiten anbieten','bei anhaltender Verweigerung oder stagnierendem Gewicht die Kinderarztpraxis einbeziehen']
+  },
+  { id:'beikost', title:'Beikosteinführung', ages:['beikost'],
+    typical:['Beikostreife zeigt sich durch aufrechtes Sitzen, Interesse am Essen der Eltern und das Verschwinden des Zungenstoßreflexes','Beikost ergänzt die Milchnahrung zunächst, ersetzt sie nicht sofort vollständig'],
+    tips:['mit einer Komponente beginnen (z. B. Gemüsebrei oder breifreie Beikost/Fingerfood)','neue Lebensmittel einzeln einführen und einige Tage abwarten','Essen als entspannte gemeinsame Zeit gestalten statt als Fütter-Pflicht'],
+    refusal:['Ablehnung neuer Konsistenzen oder Geschmäcker ist ein normaler Teil des Kennenlernens','ein Lebensmittel braucht oft 10–15 Wiederholungen, bis es akzeptiert wird','kein Drängen oder Nachschieben von Löffeln – das verstärkt die Abwehr eher, als sie zu lösen']
+  },
+  { id:'fingerfood', title:'Fingerfood & Familienkost', ages:['beikost','kleinkind'],
+    typical:['Kauen und Abbeißen werden aktiv geübt','Interesse an eigenständigem Essen mit den Händen wächst','das Essverhalten wird von Mahlzeit zu Mahlzeit zunehmend unberechenbar'],
+    tips:['weiche, kindgerecht geschnittene Stücke der Familienmahlzeit anbieten','Selbstständigkeit beim Essen fördern, auch wenn es unordentlich wird','feste Essenszeiten am Familientisch etablieren']
+  },
+  { id:'kleinkind_esser', title:'Kleinkind-Esser & Neophobie', ages:['kleinkind'],
+    typical:['Nahrungsneophobie – Skepsis gegenüber neuen Lebensmitteln – ist ein normaler Entwicklungsschritt','der Appetit schwankt stark, weil sich das Wachstumstempo verlangsamt','Vorlieben können sich von Tag zu Tag ändern'],
+    tips:['kleine Portionen anbieten, Nachschlag ist jederzeit möglich','neue Lebensmittel unaufgeregt neben Bekanntem platzieren, ohne Zwang','Mahlzeiten zeitlich begrenzen (ca. 20–30 Minuten) statt endlos zu verhandeln'],
+    refusal:['Essen abzulehnen ist in dieser Phase meist Ausdruck von Autonomiebestreben, nicht von Hunger','Machtkämpfe am Esstisch möglichst vermeiden','Verantwortung aufteilen: Eltern entscheiden was, wann und wo gegessen wird – das Kind entscheidet, ob und wie viel']
+  },
+  { id:'kita_essen', title:'Essen im Kindergartenalter', ages:['kita'],
+    typical:['Vorlieben und Abneigungen werden bewusster geäußert','der Einfluss von Kita und Freunden auf das Essverhalten wächst','Tischmanieren werden zunehmend erlernt'],
+    tips:['das Kind altersgerecht in die Essenszubereitung einbeziehen (waschen, rühren, anrichten)','gemeinsame Mahlzeiten als bildschirmfreie, soziale Zeit gestalten','die eigene Vorbildfunktion nutzen – Kinder essen eher, was sie am Familientisch sehen'],
+    refusal:['Süßes als Belohnung fürs „brave Essen“ vermeiden – das wertet Gemüse ab und Süßes auf','wiederholtes, druckfreies Anbieten bleibt die wichtigste Strategie bei Ablehnung']
+  },
+  { id:'schulkind_essen', title:'Essverhalten im Schulalter', ages:['schulkind'],
+    typical:['selbstständigere Essensentscheidungen, etwa in der Schule oder bei Freunden','wachsender Einfluss von Werbung und Peergroup','Frühstücks- und Pausenverhalten wird eigenständiger'],
+    tips:['gemeinsame Mahlzeiten als festen Ankerpunkt im Alltag beibehalten','das Kind in die Essensplanung einbeziehen (Einkauf, gemeinsames Kochen)','Medienkompetenz zu Werbung und Ernährung altersgerecht fördern'],
+    refusal:['wählerisches Essen ist oft noch ein Ausläufer der Kleinkindphase – gelassen bleiben und weiter druckfrei anbieten','bei deutlichem Rückzug von Mahlzeiten oder auffälligem Gewichtsverlauf ärztlichen Rat einholen']
+  },
+  { id:'jugend_essen', title:'Essverhalten bei Jugendlichen', ages:['jugend'],
+    typical:['die Autonomie bei Essensentscheidungen nimmt deutlich zu','Körperbild und Vergleich mit Gleichaltrigen gewinnen an Bedeutung','unregelmäßige Essenszeiten durch Schule und Freizeit sind möglich'],
+    tips:['gemeinsame Mahlzeiten so oft wie möglich beibehalten, aber ohne Zwang','über Ernährung sprechen statt über Aussehen oder Gewicht','Autonomie bei der Essensauswahl zulassen, solange die Gesamternährung ausgewogen bleibt'],
+    refusal:['deutliche Einschränkung der Nahrungsmenge, häufiges Auslassen von Mahlzeiten oder starke gedankliche Beschäftigung mit Kalorien/Gewicht sind ernstzunehmende Warnzeichen','offen und ohne Vorwurf ansprechen, statt Druck aufzubauen','professionelle Unterstützung (Kinderarztpraxis, Ernährungsberatung, ggf. Therapie) frühzeitig suchen']
+  },
+  { id:'ablehnung_allgemein', title:'Wenn dein Kind generell Essen ablehnt', general:true,
+    tips:['Verantwortung aufteilen: Eltern bestimmen was, wann und wo gegessen wird – das Kind entscheidet, ob und wie viel es davon isst','keine Druckmittel wie Bestechung, Zwang oder Bestrafung beim Essen einsetzen','neue Lebensmittel wiederholt und ohne Erwartungsdruck anbieten – Akzeptanz braucht oft viele Anläufe','Essen nicht zum Konfliktthema machen, eine ruhige Atmosphäre wirkt stärker als Überredung','den Überblick über eine ganze Woche behalten statt über einzelne Mahlzeiten zu urteilen']
+  },
+  { id:'warnzeichen', title:'Wann fachlichen Rat einholen', general:true,
+    tips:['Gewichtsverlust oder ausbleibende Gewichtszunahme über einen längeren Zeitraum','sehr stark eingeschränktes Lebensmittelspektrum (deutlich unter 10 akzeptierten Lebensmitteln)','starke Angst oder Würgereiz bei bestimmten Konsistenzen','auffälliges Verhalten rund ums Essen, etwa strikte Rituale, Kalorienzählen oder Essen im Verborgenen','wenn Mahlzeiten regelmäßig zu Familienkonflikten eskalieren','in all diesen Fällen die Kinderarztpraxis oder eine Ernährungsfachkraft ansprechen']
+  }
+];
+
+/* =========================================================
    RENDER: Entwicklungsphasen + Ruler
 ========================================================= */
 const rulerEl = document.getElementById('ruler');
@@ -714,7 +787,62 @@ function renderAid(){
 renderAid();
 
 /* =========================================================
-   TABS: Phasen / Erste Hilfe
+   RENDER: Essen & Essverhalten
+========================================================= */
+const foodAgeTabsEl = document.getElementById('food-age-tabs');
+const foodListEl = document.getElementById('food-list');
+let currentFoodAgeFilter = 'all';
+
+const foodAllTab = document.createElement('button');
+foodAllTab.className = 'age-tab active';
+foodAllTab.textContent = 'Alle Altersstufen';
+foodAllTab.dataset.age = 'all';
+foodAgeTabsEl.appendChild(foodAllTab);
+
+FOOD_AGE_GROUPS.forEach(g => {
+  const btn = document.createElement('button');
+  btn.className = 'age-tab';
+  btn.textContent = g.label;
+  btn.dataset.age = g.id;
+  foodAgeTabsEl.appendChild(btn);
+});
+
+foodAgeTabsEl.addEventListener('click', (e) => {
+  const btn = e.target.closest('.age-tab');
+  if (!btn) return;
+  currentFoodAgeFilter = btn.dataset.age;
+  Array.from(foodAgeTabsEl.children).forEach(c => c.classList.toggle('active', c === btn));
+  renderFood();
+});
+
+function renderFood(){
+  foodListEl.innerHTML = '';
+  const items = FOOD_TOPICS.filter(t => t.general || currentFoodAgeFilter === 'all' || t.ages.includes(currentFoodAgeFilter));
+  if (items.length === 0){
+    foodListEl.innerHTML = '<p class="no-results">Für diese Altersstufe sind keine gesonderten Inhalte hinterlegt.</p>';
+    return;
+  }
+  items.forEach(t => {
+    const det = document.createElement('details');
+    det.className = 'aid-card';
+    let body = '';
+    if (t.typical && t.typical.length){
+      body += `<h5>Was jetzt typisch ist</h5><ul>${t.typical.map(s=>`<li>${s}</li>`).join('')}</ul>`;
+    }
+    if (t.tips && t.tips.length){
+      body += `<h5>Praktische Tipps für Eltern</h5><ul>${t.tips.map(s=>`<li>${s}</li>`).join('')}</ul>`;
+    }
+    if (t.refusal && t.refusal.length){
+      body += `<div class="aid-emergency"><strong>Wenn das Kind ablehnt:</strong><ul>${t.refusal.map(s=>`<li>${s}</li>`).join('')}</ul></div>`;
+    }
+    det.innerHTML = `<summary>${t.title}${t.general ? '' : ''}<span class="plus">+</span></summary><div class="aid-body">${body}</div>`;
+    foodListEl.appendChild(det);
+  });
+}
+renderFood();
+
+/* =========================================================
+   TABS: Phasen / Essen / Erste Hilfe
 ========================================================= */
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -722,6 +850,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.classList.add('active');
     const target = btn.dataset.view;
     document.getElementById('view-phases').classList.toggle('active', target === 'phases');
+    document.getElementById('view-food').classList.toggle('active', target === 'food');
     document.getElementById('view-aid').classList.toggle('active', target === 'aid');
   });
 });
@@ -742,6 +871,16 @@ FIRST_AID.forEach(a => {
   searchIndex.push({ phaseId: null, aidId: a.id, ageRange: a.ages.map(id => AGE_GROUPS.find(g=>g.id===id)?.label).filter(Boolean).join(', '), phaseName: 'Erste Hilfe', cat: a.title, text: a.emergency });
   a.steps.forEach(s => {
     searchIndex.push({ phaseId: null, aidId: a.id, ageRange: a.ages.map(id => AGE_GROUPS.find(g=>g.id===id)?.label).filter(Boolean).join(', '), phaseName: 'Erste Hilfe', cat: a.title, text: s });
+  });
+});
+
+// food entries are also searchable
+FOOD_TOPICS.forEach(t => {
+  const ageLabel = t.general ? 'alle Altersstufen' : t.ages.map(id => FOOD_AGE_GROUPS.find(g=>g.id===id)?.label).filter(Boolean).join(', ');
+  ['typical','tips','refusal'].forEach(key => {
+    (t[key] || []).forEach(s => {
+      searchIndex.push({ phaseId: null, aidId: null, foodId: t.id, ageRange: ageLabel, phaseName: 'Essen & Essverhalten', cat: t.title, text: s });
+    });
   });
 });
 
@@ -792,7 +931,16 @@ searchInput.addEventListener('input', () => {
         Array.from(ageTabsEl.children).forEach(c => c.classList.toggle('active', c.dataset.age==='all'));
         renderAid();
         setTimeout(() => {
-          const target = Array.from(document.querySelectorAll('.aid-card')).find(c => c.querySelector('summary').textContent.includes(m.cat));
+          const target = Array.from(document.querySelectorAll('#aid-list .aid-card')).find(c => c.querySelector('summary').textContent.includes(m.cat));
+          if (target){ target.open = true; target.scrollIntoView({ behavior:'smooth', block:'start' }); }
+        }, 50);
+      } else if (m.foodId){
+        document.querySelector('.tab-btn[data-view="food"]').click();
+        currentFoodAgeFilter = 'all';
+        Array.from(foodAgeTabsEl.children).forEach(c => c.classList.toggle('active', c.dataset.age==='all'));
+        renderFood();
+        setTimeout(() => {
+          const target = Array.from(document.querySelectorAll('#food-list .aid-card')).find(c => c.querySelector('summary').textContent.includes(m.cat));
           if (target){ target.open = true; target.scrollIntoView({ behavior:'smooth', block:'start' }); }
         }, 50);
       }
