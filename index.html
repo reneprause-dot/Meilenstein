@@ -342,7 +342,9 @@ button { font-family:inherit; cursor:pointer; }
 .fav-mini.is-fav{color:var(--rose);border-color:var(--rose);background:var(--rose-bg);}
 
 /* FOOTER */
-.app-footer { margin-top:36px; padding:14px 0; border-top:1.5px solid var(--border); font-size:11.5px; color:var(--text-dim); }
+.app-footer { margin-top:36px; padding:14px 0; border-top:1.5px solid var(--border); font-size:11.5px; color:var(--text-dim); display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+.update-btn { background:none; border:1.5px solid var(--border); border-radius:8px; color:var(--text-dim); padding:4px 11px; font-size:11.5px; cursor:pointer; margin-left:auto; display:flex; align-items:center; gap:5px; font-family:inherit; }
+.update-btn:hover { border-color:var(--peach); color:var(--peach); }
 
 @media(max-width:600px){
   .phases-layout { grid-template-columns:1fr; }
@@ -526,7 +528,7 @@ html.theme-blau .tab-btn.tab-steckbrief.active { color:#2898A8; border-bottom-co
   </section>
 
   <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Nach oben">&#8593;</button>
-<footer class="app-footer">MEILENSTEIN · Elternratgeber · Keine Datenübertragung · Offline-fähig</footer>
+<footer class="app-footer"><span>MEILENSTEIN <strong id="app-ver">v0.0.16</strong> · © René Prause · Keine Datenübertragung · Offline-fähig</span><button class="update-btn" onclick="hardReset()" title="Auf neueste Version aktualisieren">↺ Aktualisieren</button></footer>
 </div>
 
 <div class="modal-overlay" id="modal-overlay">
@@ -869,6 +871,8 @@ const WHO_W=[
 /* ═══════════════════════════════════════════════════
    APP STATE
 ═══════════════════════════════════════════════════ */
+const APP_VERSION='v0.0.16';
+
 let profiles = [];
 let activeProfileId = null;
 let favorites = [];
@@ -2170,6 +2174,35 @@ function bindSearch(){
 }
 
 /* ─── Start ───────────────────────────────────── */
+/* --- Hard Reset / Update ---- */
+function hardReset(){
+  if(!confirm('App auf die neueste Version aktualisieren?\n\nDeine gespeicherten Daten (Profile, Favoriten, Notizen) bleiben erhalten.')) return;
+  var done=function(){
+    // Force reload bypassing cache
+    window.location.href=window.location.href.split('?')[0]+'?v='+Date.now();
+  };
+  var cleared=0, total=0;
+  // Unregister service workers
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.getRegistrations().then(function(regs){
+      total+=regs.length;
+      if(!regs.length && !total) clearCaches();
+      regs.forEach(function(r){r.unregister().then(function(){cleared++;if(cleared>=total) clearCaches();});});
+    });
+  } else { clearCaches(); }
+}
+function clearCaches(){
+  if('caches' in window){
+    caches.keys().then(function(names){
+      Promise.all(names.map(function(n){return caches.delete(n);})).then(function(){
+        window.location.href=window.location.href.split('?')[0]+'?bust='+Date.now();
+      });
+    });
+  } else {
+    window.location.reload(true);
+  }
+}
+
 /* --- Scroll-to-top ---- */
 window.addEventListener('scroll',function(){
   var b=document.getElementById('scroll-top');
