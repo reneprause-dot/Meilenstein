@@ -267,8 +267,8 @@ button { font-family:inherit; cursor:pointer; }
 .vacc-progress-fill { height:100%; background:var(--mint); border-radius:3px; transition:width .3s; }
 
 /* TAB – FAVORITEN hervorgehoben */
-.tab-btn.tab-favs { color:var(--rose); font-weight:700; }
-.tab-btn.tab-favs.active { color:var(--rose); border-bottom-color:var(--rose); }
+.tab-btn.tab-steckbrief { color:var(--mint); font-weight:700; }
+.tab-btn.tab-steckbrief.active { color:var(--mint); border-bottom-color:var(--mint); border-bottom-width:3px; }
 
 /* STECKBRIEF */
 .sb-card { background:var(--surface); border:2px solid var(--mint); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px 22px; margin-bottom:16px; }
@@ -376,8 +376,8 @@ button { font-family:inherit; cursor:pointer; }
   </header>
 
   <nav class="tabbar">
-    <button class="tab-btn tab-favs active" data-view="favs">♥ Favoriten</button>
-    <button class="tab-btn" data-view="steckbrief">🧬 Steckbrief</button>
+    <button class="tab-btn tab-steckbrief active" data-view="steckbrief">🧬 Steckbrief</button>
+    <button class="tab-btn" data-view="favs">♥ Favoriten</button>
     <button class="tab-btn" data-view="phases">Phasen</button>
     <button class="tab-btn" data-view="sleep">Schlaf</button>
     <button class="tab-btn" data-view="milestones">Meilensteine ✓</button>
@@ -388,11 +388,11 @@ button { font-family:inherit; cursor:pointer; }
     <button class="tab-btn" data-view="vaccines">Impfungen 💉</button>
   </nav>
 
-  <section id="view-favs" class="view active">
+  <section id="view-favs" class="view">
     <div id="favs-list"></div>
   </section>
 
-  <section id="view-steckbrief" class="view">
+  <section id="view-steckbrief" class="view active">
     <div id="steckbrief-content"></div>
   </section>
 
@@ -1308,6 +1308,7 @@ function toggleVacc(gid, iid) {
     const newStatus = vaccGroupStatus(g);
     if (statusEl) { statusEl.className = 'vacc-status status-' + newStatus; statusEl.textContent = STATUS_LABEL[newStatus]; }
   }
+  renderSteckbrief();
 }
 
 /* ═══════════════════════════════════════════════════
@@ -1508,18 +1509,30 @@ function renderSteckbrief(){
   if(al.notes) html+='<div class="sb-custom-note" style="margin-top:6px;border-left:3px solid var(--rose)">⚠️ '+al.notes+'</div>';
   html+='</div>';
 
-  // ── Impfstatus ─────────────────────────────────
+  // ── Impfstatus inline ──────────────────────────────
   html+='<hr class="sb-divider"><div class="sb-section">';
-  html+='<div class="sb-section-title">💉 Impfstatus</div>';
-  html+='<div style="display:flex;align-items:center;gap:12px">';
-  html+='<div style="flex:1;background:var(--border);border-radius:3px;height:6px;overflow:hidden"><div style="width:'+vaccPct+'%;height:100%;background:var(--mint);border-radius:3px"></div></div>';
-  html+='<span style="font-size:13px;font-weight:700;color:var(--mint);white-space:nowrap">'+doneVaccs+'/'+totalVaccs+'</span>';
-  html+='<button onclick="document.querySelector(\'.tab-btn[data-view=vaccines]\').click()" style="background:none;border:none;color:var(--peach);font-size:12px;font-weight:700;padding:0">Details →</button>';
-  html+='</div></div>';
+  html+='<div class="sb-section-title">💉 Impfstatus — '+doneVaccs+' von '+totalVaccs+' abgehakt</div>';
+  html+='<div style="background:var(--border);border-radius:3px;height:7px;overflow:hidden;margin-bottom:12px"><div style="width:'+vaccPct+'%;height:100%;background:var(--mint);border-radius:3px"></div></div>';
+  var svColors={done:'var(--mint)',due:'var(--rose)',soon:'var(--amber)',upcoming:'var(--text-dim)',na:'var(--text-dim)'};
+  var svIcons={done:'✓',due:'⚠',soon:'⏰',upcoming:'○',na:'○'};
+  var svLabels={done:'Erledigt',due:'Jetzt fällig',soon:'Demnächst',upcoming:'Noch offen',na:''};
+  VACCINES.forEach(function(vg){
+    var pvg=vaccs[activeProfileId]||{};
+    var gDone=vg.items.filter(function(it){return pvg[it.id];}).length;
+    var gSt=vaccGroupStatus(vg);
+    var col=svColors[gSt];
+    html+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;padding:8px 10px;background:var(--bg);border-radius:9px;border:1.5px solid var(--border)">';
+    html+='<span style="font-size:14px;font-weight:700;color:'+col+';width:18px;text-align:center">'+svIcons[gSt]+'</span>';
+    html+='<div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+vg.age+'</div>';
+    html+='<div style="font-size:11px;color:var(--text-dim)">'+gDone+'/'+vg.items.length+' Impfungen</div></div>';
+    if(gSt!=='na') html+='<span style="font-size:11px;font-weight:700;color:'+col+'">'+svLabels[gSt]+'</span>';
+    html+='</div>';
+  });
+  html+='</div>';
 
   // ── Erste Hilfe Favoriten ──────────────────────
   html+='<hr class="sb-divider"><div class="sb-section">';
-  html+='<div class="sb-section-title">🩺 Erste-Hilfe-Favoriten <span style="font-weight:400;font-size:10px;color:var(--text-dim)">(♥ auf Erste-Hilfe-Karten setzen)</span></div>';
+  html+='<div class="sb-section-title">🩺 Erste-Hilfe-Favoriten</div>';
   if(favAid.length){
     html+='<div class="sb-aid-list">';
     favAid.forEach(a=>{
