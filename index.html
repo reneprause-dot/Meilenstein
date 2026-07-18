@@ -336,6 +336,11 @@ button { font-family:inherit; cursor:pointer; }
 .growth-badge { background:var(--sky-bg); border:1.5px solid rgba(90,159,212,.3); border-radius:999px; padding:4px 12px; font-size:12.5px; font-weight:700; color:var(--sky); }
 .growth-empty { color:var(--text-dim); font-size:.88rem; font-style:italic; }
 
+/* FAV-MINI BUTTON */
+.fav-mini{background:none;border:1.5px solid var(--border);border-radius:8px;padding:4px 9px;font-size:13px;color:var(--text-dim);flex-shrink:0;cursor:pointer;}
+.fav-mini:hover{border-color:var(--rose);color:var(--rose);}
+.fav-mini.is-fav{color:var(--rose);border-color:var(--rose);background:var(--rose-bg);}
+
 /* FOOTER */
 .app-footer { margin-top:36px; padding:14px 0; border-top:1.5px solid var(--border); font-size:11.5px; color:var(--text-dim); }
 
@@ -899,7 +904,21 @@ function checkPhaseNotification(){
 }
 
 /* ─── Favorites ───────────────────────────────── */
+function getFavType(id){
+  if(/^p\d+$/.test(id)) return 'phase';
+  if(/^a\d+$/.test(id)) return 'aid';
+  if(id.startsWith('sl')) return 'sleep';
+  if(id.startsWith('mg')) return 'milestone';
+  if(/^f\d+$/.test(id)) return 'food';
+  if(id.startsWith('sa')) return 'safety';
+  if(id.startsWith('vg')) return 'vaccine';
+  return null;
+}
 function isFav(id){return favorites.includes(id);}
+function favBtn(id){
+  const f=isFav(id);
+  return '<button class="fav-mini'+(f?' is-fav':'')+'" data-fav="'+id+'" onclick="event.stopPropagation();toggleFav(\''+id+'\')">'+(f?'♥':'♡')+'</button>';
+}
 function toggleFav(id){
   favorites=isFav(id)?favorites.filter(f=>f!==id):[...favorites,id];
   store('ms_favs',favorites);
@@ -1030,7 +1049,7 @@ function renderSleep(){
     <details class="sleep-card" ${i===0?'open':''}>
       <summary>
         <div><div class="s-age">${s.range}</div><div class="s-hours">${s.total} Schlaf</div></div>
-        <span class="s-plus">+</span>
+        ${favBtn('sl'+i)}<span class="s-plus">+</span>
       </summary>
       <div class="sleep-body">
         <div class="sleep-stats">
@@ -1064,7 +1083,7 @@ function renderMilestones(){
     div.innerHTML=`
       <div class="ms-head">
         <div class="ms-age">${g.lbl}</div>
-        <div class="ms-progress">${done}/${g.items.length}</div>
+        <div style="display:flex;align-items:center;gap:8px"><div class="ms-progress">${done}/${g.items.length}</div>${favBtn(g.id)}</div>
       </div>
       <div class="ms-items">
         ${g.items.map(it=>`
@@ -1089,6 +1108,7 @@ function toggleCheck(gid,iid,el){
   const g=MILESTONES.find(x=>x.id===gid);
   const pc=checks[activeProfileId]||{};
   el.closest('.ms-group').querySelector('.ms-progress').textContent=g.items.filter(it=>pc[it.id]).length+'/'+g.items.length;
+  if(favorites.includes(gid)) renderFavs();
 }
 
 /* ═══════════════════════════════════════════════════
@@ -1116,7 +1136,7 @@ function renderFoodList(){
     if(t.tips?.length) body+=`<h5>Tipps für Eltern</h5><ul>${t.tips.map(s=>`<li>${s}</li>`).join('')}</ul>`;
     if(t.refusal?.length) body+=`<div class="box-alert box-peach"><strong>Wenn das Kind ablehnt:</strong><ul>${t.refusal.map(s=>`<li>${s}</li>`).join('')}</ul></div>`;
     if(t.avoid?.length) body+=`<div class="box-alert box-amber"><strong>Besser meiden in diesem Alter:</strong><ul>${t.avoid.map(s=>`<li>${s}</li>`).join('')}</ul></div>`;
-    return `<details class="expand-card food"><summary>${t.title}<span class="ec-plus">+</span></summary><div class="ec-body">${body}</div></details>`;
+    return `<details class="expand-card food"><summary>${t.title}<div style="display:flex;align-items:center;gap:6px">${favBtn(t.id)}<span class="ec-plus">+</span></div></summary><div class="ec-body">${body}</div></details>`;
   }).join('');
 }
 
@@ -1124,11 +1144,11 @@ function renderFoodList(){
    RENDER – SICHERHEIT
 ═══════════════════════════════════════════════════ */
 function renderSafety(){
-  document.getElementById('safety-list').innerHTML=SAFETY_DATA.map(s=>`
+  document.getElementById('safety-list').innerHTML=SAFETY_DATA.map((s,i)=>`
     <details class="safety-card">
       <summary>
         <div><div class="sa-age">${s.range}</div><div class="sa-title">Sicherheit &amp; Medienzeit</div></div>
-        <span class="sa-plus">+</span>
+        <div style="display:flex;align-items:center;gap:6px">${favBtn('sa'+i)}<span class="sa-plus">+</span></div>
       </summary>
       <div class="safety-body">
         <div class="safety-section hazards"><h5>⚠ Gefahrenquellen</h5><ul>${s.hazards.map(h=>`<li>${h}</li>`).join('')}</ul></div>
@@ -1164,7 +1184,7 @@ function renderAidList(){
   const items=FIRST_AID.filter(a=>currentAidAge==='all'||a.ages.includes(currentAidAge));
   el.innerHTML=items.map(a=>`
     <details class="expand-card aid">
-      <summary>${a.title}<span class="ec-plus">+</span></summary>
+      <summary><span style="flex:1">${a.title}</span><div style="display:flex;align-items:center;gap:6px">${favBtn(a.id)}<span class="ec-plus">+</span></div></summary>
       <div class="ec-body">
         <h5>Sofortmaßnahmen</h5>
         <ol>${a.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
@@ -1177,35 +1197,62 @@ function renderAidList(){
 /* ═══════════════════════════════════════════════════
    RENDER – FAVORITEN
 ═══════════════════════════════════════════════════ */
+function rmFavBtn(id){return '<button class="fav-mini is-fav" data-fav="'+id+'" onclick="toggleFav(\''+id+'\')">\u2665 entfernen</button>';}
 function renderFavs(){
   const el=document.getElementById('favs-list');
-  if(!favorites.length){el.innerHTML='<div class="favs-empty"><div class="empty-icon">♡</div><div>Noch keine Favoriten.<br>Tippe auf das ♡ auf einer Karte, um sie hier zu speichern.</div></div>';return;}
+  if(!favorites.length){
+    el.innerHTML='<div class="favs-empty"><div class="empty-icon">♡</div><div>Noch keine Favoriten gespeichert.<br>Tippe auf das <strong>♡</strong> auf jeder Karte, um sie hier zu sammeln.</div></div>';
+    return;
+  }
+  const ORDER=['phase','sleep','milestone','food','safety','aid','vaccine'];
+  const LABELS={phase:'🌱 Entwicklungsphasen',sleep:'💤 Schlaf',milestone:'✅ Meilensteine',food:'🍎 Essen & Essverhalten',safety:'🏠 Sicherheit',aid:'🩺 Erste Hilfe',vaccine:'💉 Impfungen'};
+  const grouped={};ORDER.forEach(t=>grouped[t]=[]);
+  favorites.forEach(id=>{const t=getFavType(id);if(t&&grouped[t])grouped[t].push(id);});
   let html='';
-  const fp=PHASES.filter(p=>favorites.includes(p.id));
-  if(fp.length){
-    html+='<div class="fav-section-label">Entwicklungsphasen</div>';
-    html+=fp.map(p=>`
-      <div class="phase-card" style="margin-bottom:14px">
-        <div class="phase-head">
-          <div><div class="phase-age">${p.range}</div><div class="phase-name">${p.name}</div></div>
-          <button class="action-btn is-fav" data-fav="${p.id}" onclick="toggleFav('${p.id}')">♥</button>
-        </div>
-        <div class="cat-grid">${Object.entries(p.cats).map(([c,items])=>`<div class="cat"><h4>${c}</h4><ul>${items.map(i=>`<li>${i}</li>`).join('')}</ul></div>`).join('')}</div>
-      </div>
-    `).join('');
-  }
-  const fa=FIRST_AID.filter(a=>favorites.includes(a.id));
-  if(fa.length){
-    html+='<div class="fav-section-label">Erste Hilfe</div>';
-    html+=fa.map(a=>`
-      <details class="expand-card aid" style="margin-bottom:12px">
-        <summary>${a.title}<span class="ec-plus">+</span></summary>
-        <div class="ec-body"><h5>Sofortmaßnahmen</h5><ol>${a.steps.map(s=>`<li>${s}</li>`).join('')}</ol><div class="box-alert box-red"><strong>Notruf/Arzt, wenn:</strong> ${a.emergency}</div></div>
-      </details>
-    `).join('');
-  }
+  ORDER.forEach(type=>{
+    const ids=grouped[type];if(!ids.length)return;
+    html+='<div class="fav-section-label">'+LABELS[type]+'</div>';
+    ids.forEach(id=>{
+      const rmBtn=rmFavBtn(id);
+      if(type==='phase'){
+        const p=PHASES.find(x=>x.id===id);if(!p)return;
+        html+='<div class="phase-card" style="margin-bottom:14px"><div class="phase-head"><div><div class="phase-age">'+p.range+'</div><div class="phase-name">'+p.name+'</div><div class="phase-tag">'+p.tag+'</div></div>'+rmBtn+'</div><div class="cat-grid">'+Object.entries(p.cats).map(([c,items])=>'<div class="cat"><h4>'+c+'</h4><ul>'+items.map(i=>'<li>'+i+'</li>').join('')+'</ul></div>').join('')+'</div></div>';
+      } else if(type==='sleep'){
+        const idx=parseInt(id.replace('sl',''));const s=SLEEP_DATA[idx];if(!s)return;
+        html+='<div class="sleep-card" style="margin-bottom:12px"><div style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1.5px solid var(--border)"><div><div class="s-age">'+s.range+'</div><div class="s-hours">'+s.total+' Schlaf</div></div>'+rmBtn+'</div><div class="sleep-body"><div class="sleep-stats"><div class="sleep-stat"><div class="st-label">Gesamt</div><div class="st-val">'+s.total+'</div></div><div class="sleep-stat"><div class="st-label">Nacht</div><div class="st-val">'+s.night+'</div></div><div class="sleep-stat"><div class="st-label">Schläfchen</div><div class="st-val">'+s.naps+'</div></div></div><div class="sleep-tips"><h5>Tipps</h5><ul>'+s.tips.map(t=>'<li>'+t+'</li>').join('')+'</ul></div><div class="sleep-probs"><h5>Häufige Probleme</h5><ul>'+s.probs.map(t=>'<li>'+t+'</li>').join('')+'</ul></div></div></div>';
+      } else if(type==='milestone'){
+        const mg=MILESTONES.find(x=>x.id===id);if(!mg)return;
+        const pc=checks[activeProfileId]||{};
+        const done=mg.items.filter(it=>pc[it.id]).length;
+        html+='<div class="ms-group" style="margin-bottom:12px"><div class="ms-head"><div class="ms-age">'+mg.lbl+'</div><div style="display:flex;gap:8px;align-items:center"><span class="ms-progress">'+done+'/'+mg.items.length+'</span>'+rmBtn+'</div></div><div class="ms-items">'+mg.items.map(it=>'<div class="ms-item'+(pc[it.id]?' checked':'')+'"><div class="ms-check">'+(pc[it.id]?'✓':'')+'</div><div class="ms-text"><span class="badge '+BADGE[it.cat]+'">'+BADGE_LBL[it.cat]+'</span>'+it.text+'</div></div>').join('')+'</div></div>';
+      } else if(type==='food'){
+        const t=FOOD_TOPICS.find(x=>x.id===id);if(!t)return;
+        let body='';
+        if(t.typical?.length) body+='<h5>Was typisch ist</h5><ul>'+t.typical.map(s=>'<li>'+s+'</li>').join('')+'</ul>';
+        if(t.tips?.length) body+='<h5>Tipps für Eltern</h5><ul>'+t.tips.map(s=>'<li>'+s+'</li>').join('')+'</ul>';
+        if(t.refusal?.length) body+='<div class="box-alert box-peach"><strong>Wenn das Kind ablehnt:</strong><ul>'+t.refusal.map(s=>'<li>'+s+'</li>').join('')+'</ul></div>';
+        if(t.avoid?.length) body+='<div class="box-alert box-amber"><strong>Besser meiden:</strong><ul>'+t.avoid.map(s=>'<li>'+s+'</li>').join('')+'</ul></div>';
+        html+='<div class="expand-card food" style="margin-bottom:12px"><div style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1.5px solid var(--border)"><span style="font-family:var(--ff-display);font-size:16px;font-weight:700">'+t.title+'</span>'+rmBtn+'</div><div class="ec-body">'+body+'</div></div>';
+      } else if(type==='safety'){
+        const idx=parseInt(id.replace('sa',''));const s=SAFETY_DATA[idx];if(!s)return;
+        html+='<div class="safety-card" style="margin-bottom:12px"><div style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1.5px solid var(--border)"><div><div class="sa-age">'+s.range+'</div><div class="sa-title">Sicherheit &amp; Medienzeit</div></div>'+rmBtn+'</div><div class="safety-body"><div class="safety-section hazards"><h5>⚠ Gefahrenquellen</h5><ul>'+s.hazards.map(h=>'<li>'+h+'</li>').join('')+'</ul></div><div class="safety-section screen" style="margin-top:16px"><h5>📱 Bildschirmzeit</h5><ul>'+s.screen.map(sc=>'<li>'+sc+'</li>').join('')+'</ul></div></div></div>';
+      } else if(type==='aid'){
+        const a=FIRST_AID.find(x=>x.id===id);if(!a)return;
+        html+='<div class="expand-card aid" style="margin-bottom:12px"><div style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1.5px solid var(--border)"><span style="font-family:var(--ff-display);font-size:16px;font-weight:700">'+a.title+'</span>'+rmBtn+'</div><div class="ec-body"><h5>Sofortmaßnahmen</h5><ol>'+a.steps.map(s=>'<li>'+s+'</li>').join('')+'</ol><div class="box-alert box-red"><strong>Notruf/Arzt, wenn:</strong> '+a.emergency+'</div></div></div>';
+      } else if(type==='vaccine'){
+        const g=VACCINES.find(x=>x.id===id);if(!g)return;
+        const pv=vaccs[activeProfileId]||{};
+        const done=g.items.filter(it=>pv[it.id]).length;
+        const gSt=vaccGroupStatus(g);
+        const stCol={done:'var(--mint)',due:'var(--rose)',soon:'var(--amber)',upcoming:'var(--text-dim)',na:'var(--text-dim)'};
+        const stLbl={done:'Erledigt',due:'Jetzt fällig',soon:'Demnächst',upcoming:'Noch offen',na:''};
+        html+='<div class="vacc-group" style="margin-bottom:12px"><div class="vacc-head"><div><div class="vacc-age">'+g.age+'</div><div class="vacc-title">'+g.tag+'</div></div><div style="display:flex;gap:6px;align-items:center">'+(gSt!=='na'?'<span class="vacc-status status-'+gSt+'">'+stLbl[gSt]+'</span>':'')+rmBtn+'</div></div><div style="padding:4px 18px 6px;font-size:12px;color:var(--text-dim)">'+done+'/'+g.items.length+' abgehakt</div><div class="vacc-items">'+g.items.map(it=>'<div class="vacc-item'+(pv[it.id]?' checked':'')+'"><div class="vacc-item-head" style="cursor:default"><div class="vacc-check">'+(pv[it.id]?'✓':'')+'</div><div class="vacc-item-name"><div class="vacc-name">'+it.name+'</div><div class="vacc-abbr">'+it.abbr+'</div></div><span class="vacc-dose">'+it.dose+'</span></div><div class="vacc-desc" style="display:block">'+it.desc+'</div></div>').join('')+'</div></div>';
+      }
+    });
+  });
   el.innerHTML=html;
 }
+
 
 /* ═══════════════════════════════════════════════════
    RENDER – IMPFUNGEN
@@ -1243,7 +1290,7 @@ function renderVaccines() {
           <div class="vacc-age">${g.age}</div>
           <div class="vacc-title">${g.tag}</div>
         </div>
-        ${status !== 'na' ? `<span class="vacc-status status-${status}">${STATUS_LABEL[status]}</span>` : ''}
+        <div style="display:flex;gap:6px;align-items:center">${status !== 'na' ? `<span class="vacc-status status-${status}">${STATUS_LABEL[status]}</span>` : ''}${favBtn(g.id)}</div>
       </div>
       <div class="vacc-info">${g.info}</div>
       <div style="padding:8px 18px 4px">
@@ -1309,6 +1356,7 @@ function toggleVacc(gid, iid) {
     if (statusEl) { statusEl.className = 'vacc-status status-' + newStatus; statusEl.textContent = STATUS_LABEL[newStatus]; }
   }
   renderSteckbrief();
+  if(isFav(gid)) renderFavs();
 }
 
 /* ═══════════════════════════════════════════════════
