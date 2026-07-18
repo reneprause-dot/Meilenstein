@@ -353,6 +353,52 @@ button { font-family:inherit; cursor:pointer; }
   .sleep-stats { grid-template-columns:repeat(2,1fr); }
 }
 @media(prefers-reduced-motion:reduce){ * { transition:none!important; animation:none!important; } }
+
+/* THEME SWITCHER DOTS */
+.theme-picker { display:flex; gap:5px; align-items:center; margin-left:6px; }
+.t-dot { width:22px; height:22px; border-radius:50%; border:2.5px solid transparent; cursor:pointer; flex-shrink:0; transition:transform .15s,box-shadow .15s; }
+.t-dot:hover { transform:scale(1.15); }
+.t-dot.active { box-shadow:0 0 0 2.5px var(--bg),0 0 0 5px var(--text-dim); }
+.t-dot-rosa { background:linear-gradient(135deg,#F090B8,#D05090); }
+.t-dot-blau { background:linear-gradient(135deg,#70B8F4,#3A80CC); }
+
+/* ── ROSA theme ── */
+html.theme-rosa {
+  --bg: #FFF5FB;
+  --peach: #C85090;
+  --peach-bg: #FCEAF5;
+  --mint: #9B5EC8;
+  --mint-bg: #F2E8FA;
+  --sky: #C050A0;
+  --sky-bg: #FAEAF5;
+  --amber: #C05090;
+  --amber-bg: #FCEAF5;
+  --lavender: #C860A8;
+  --lavender-bg: #FAEAF8;
+}
+html.theme-rosa body { background:linear-gradient(180deg,#FFF5FB,#FFF5FB); }
+html.theme-rosa { background:linear-gradient(180deg,#FFF5FB,#FFF5FB); }
+html.theme-rosa .tab-btn.tab-steckbrief { color:#9B5EC8; }
+html.theme-rosa .tab-btn.tab-steckbrief.active { color:#9B5EC8; border-bottom-color:#9B5EC8; }
+
+/* ── BLAU theme ── */
+html.theme-blau {
+  --bg: #F5F8FF;
+  --peach: #3A88CC;
+  --peach-bg: #E3EFFA;
+  --mint: #2898A8;
+  --mint-bg: #E0F4F8;
+  --sky: #5070D4;
+  --sky-bg: #E4EBF8;
+  --amber: #2898A8;
+  --amber-bg: #E0F4F8;
+  --lavender: #507ACC;
+  --lavender-bg: #E4EBF8;
+}
+html.theme-blau body { background:linear-gradient(180deg,#F5F8FF,#F5F8FF); }
+html.theme-blau { background:linear-gradient(180deg,#F5F8FF,#F5F8FF); }
+html.theme-blau .tab-btn.tab-steckbrief { color:#2898A8; }
+html.theme-blau .tab-btn.tab-steckbrief.active { color:#2898A8; border-bottom-color:#2898A8; }
 </style>
 </head>
 <body>
@@ -361,10 +407,16 @@ button { font-family:inherit; cursor:pointer; }
   <header class="app-header">
     <div class="header-top">
       <span class="brand-pill">ELTERNRATGEBER</span>
-      <div class="font-controls">
-        <button class="font-btn" onclick="changeFont(-1)">A−</button>
-        <button class="font-btn" onclick="changeFont(0)">A</button>
-        <button class="font-btn" onclick="changeFont(1)">A+</button>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="theme-picker">
+          <button class="t-dot t-dot-rosa" id="btn-rosa" onclick="setTheme('rosa')" title="Rosa"></button>
+          <button class="t-dot t-dot-blau" id="btn-blau" onclick="setTheme('blau')" title="Blau"></button>
+        </div>
+        <div class="font-controls">
+          <button class="font-btn" onclick="changeFont(-1)">A−</button>
+          <button class="font-btn" onclick="changeFont(0)">A</button>
+          <button class="font-btn" onclick="changeFont(1)">A+</button>
+        </div>
       </div>
     </div>
     <h1 class="app-title">MEILENSTEIN</h1>
@@ -737,6 +789,7 @@ let profiles = [];
 let activeProfileId = null;
 let favorites = [];
 let fontIdx = 1;
+let currentTheme = 'default';
 let searchHistory = [];
 let checks = {};
 let vaccs = {};
@@ -758,12 +811,14 @@ function init(){
   activeProfileId=retrieve('ms_activeId',null);
   favorites=retrieve('ms_favs',[]);
   fontIdx=retrieve('ms_fontIdx',1);
+  currentTheme=retrieve('ms_theme','default');
   searchHistory=retrieve('ms_searches',[]);
   checks=retrieve('ms_checks',{});
   vaccs=retrieve('ms_vaccs',{});
   allergenData=retrieve('ms_allergens',{});
   growthData=retrieve('ms_growth',{});
   applyFont();
+  applyTheme(currentTheme);
   renderProfileBar();
   renderPhaseBanner();
   renderSearchHistory();
@@ -786,6 +841,47 @@ function init(){
 
 /* ─── Font Size ───────────────────────────────── */
 function applyFont(){document.documentElement.style.setProperty('--base-font',FONT_SIZES[fontIdx]+'px');}
+
+/* ─── Theme ───────────────────────────────────── */
+const ICON_COLORS={
+  default:{bg:'#FFF9F5',main:'#E8946E',line:'#5CB89A'},
+  rosa:   {bg:'#FFF5FB',main:'#C85090',line:'#9B5EC8'},
+  blau:   {bg:'#F5F8FF',main:'#3A88CC',line:'#2898A8'}
+};
+const THEME_META={default:'#FFF9F5',rosa:'#FFF5FB',blau:'#F5F8FF'};
+
+function applyTheme(theme){
+  document.documentElement.classList.remove('theme-rosa','theme-blau');
+  if(theme==='rosa') document.documentElement.classList.add('theme-rosa');
+  if(theme==='blau') document.documentElement.classList.add('theme-blau');
+  currentTheme=theme;
+  // Update favicon dynamically
+  const c=ICON_COLORS[theme]||ICON_COLORS.default;
+  const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">'
+    +'<rect width="512" height="512" rx="96" fill="'+c.bg+'"/>'
+    +'<rect x="176" y="64" width="72" height="384" rx="16" fill="#FFFFFF" stroke="#F4DCCB" stroke-width="4"/>'
+    +'<g stroke="'+c.main+'" stroke-width="10" stroke-linecap="round">'
+    +'<line x1="176" y1="120" x2="248" y2="120"/><line x1="176" y1="176" x2="230" y2="176"/>'
+    +'<line x1="176" y1="232" x2="248" y2="232"/><line x1="176" y1="288" x2="230" y2="288"/>'
+    +'<line x1="176" y1="344" x2="248" y2="344"/><line x1="176" y1="400" x2="230" y2="400"/>'
+    +'</g><circle cx="352" cy="176" r="54" fill="'+c.main+'"/>'
+    +'<path d="M352 150 L352 202 M326 176 L378 176" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/>'
+    +'<path d="M120 400 C150 340 200 340 230 400" fill="none" stroke="'+c.line+'" stroke-width="16" stroke-linecap="round"/>'
+    +'</svg>';
+  const iconEl=document.querySelector('link[rel="icon"]');
+  if(iconEl) iconEl.href='data:image/svg+xml,'+encodeURIComponent(svg);
+  // Update theme-color meta
+  const metaEl=document.querySelector('meta[name="theme-color"]');
+  if(metaEl) metaEl.content=THEME_META[theme]||THEME_META.default;
+  // Update dot active state
+  document.getElementById('btn-rosa')?.classList.toggle('active',theme==='rosa');
+  document.getElementById('btn-blau')?.classList.toggle('active',theme==='blau');
+}
+function setTheme(theme){
+  applyTheme(theme);
+  store('ms_theme',theme);
+}
+
 function changeFont(dir){
   if(dir===0){fontIdx=1;}else{fontIdx=Math.max(0,Math.min(FONT_SIZES.length-1,fontIdx+dir));}
   applyFont(); store('ms_fontIdx',fontIdx);
