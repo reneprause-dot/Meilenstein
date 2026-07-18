@@ -1159,6 +1159,7 @@ function bindTabs(){
       btn.classList.add('active');
       const v=btn.dataset.view;
       document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id==='view-'+v));
+      if(v==='steckbrief') setTimeout(renderGrowthChart,80);
     });
   });
 }
@@ -1470,7 +1471,7 @@ function renderFavs(){
     });
   });
   el.innerHTML=html;
-  setTimeout(function(){renderGrowthChart();},20);
+  setTimeout(function(){renderGrowthChart();},150);
 }
 
 
@@ -1873,44 +1874,70 @@ async function shareSteckbrief(){
 ======================================================== */
 function renderGrowthChart(){
   var prof=activeProfile();
-  if(!prof||!prof.birthdate) return;
-  if(!document.getElementById('chart-height')) return;
+  var noDataMsg='Geburtsdatum im Profil eintragen, um die Grafik anzuzeigen';
+  if(!prof||!prof.birthdate){
+    drawNoData('chart-height',noDataMsg);
+    drawNoData('chart-weight',noDataMsg);
+    return;
+  }
+  var c=document.getElementById('chart-height');
+  if(!c) return;
+  // retry if canvas not yet laid out
+  if(c.offsetWidth===0||c.offsetParent===null){
+    setTimeout(renderGrowthChart,200);
+    return;
+  }
   var entries=getGrowth();
   var birth=new Date(prof.birthdate+'T12:00');
-  var pts=entries.map(function(e){
+  var pts=entries.filter(function(e){return e.height||e.weight;}).map(function(e){
     var d=new Date(e.date+'T12:00');
     var m=(d-birth)/(1000*60*60*24*30.4375);
-    return {m:Math.max(0,m),h:e.height,w:e.weight};
-  }).filter(function(p){return p.m>=0;});
+    return {m:Math.max(0,m),h:e.height||null,w:e.weight||null};
+  });
   var curM=calcMonths(prof.birthdate)||0;
-  var maxM=Math.max(curM+3,18);
-  if(pts.length) maxM=Math.max(maxM,pts[pts.length-1].m+3);
+  var maxM=Math.max(curM+4,18);
+  if(pts.length) maxM=Math.max(maxM,pts[pts.length-1].m+4);
   maxM=Math.min(maxM,192);
   var accent=getComputedStyle(document.documentElement).getPropertyValue('--peach').trim()||'#E8946E';
+  if(!accent.match(/^#[0-9A-Fa-f]{6}$/)) accent='#E8946E';
   drawGrowthChart('chart-height',WHO_H,pts,'h','cm',maxM,accent,prof.name);
   drawGrowthChart('chart-weight',WHO_W,pts,'w','kg',Math.min(maxM,156),accent,prof.name);
+}
+
+function drawNoData(cid,msg){
+  var canvas=document.getElementById(cid);if(!canvas)return;
+  var dpr=window.devicePixelRatio||1;
+  var W=canvas.offsetWidth||300;
+  canvas.width=W*dpr;canvas.height=200*dpr;
+  var ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
+  ctx.fillStyle='#F8F5F0';ctx.fillRect(0,0,W,200);
+  ctx.fillStyle='#C0B0A0';ctx.font='13px Inter,system-ui';ctx.textAlign='center';
+  ctx.fillText(msg,W/2,100);
 }
 
 function drawGrowthChart(cid,ref,pts,key,unit,maxM,accent,name){
   var canvas=document.getElementById(cid);
   if(!canvas) return;
   var dpr=window.devicePixelRatio||1;
-  var W=canvas.offsetWidth||300;
-  var H=200;
-  canvas.width=W*dpr; canvas.height=H*dpr;
+  var W=Math.max(canvas.getBoundingClientRect().width||0, canvas.offsetWidth||0, 280);
+  var H=220;
+  canvas.width=Math.round(W*dpr); canvas.height=Math.round(H*dpr);
+  canvas.style.height=H+'px';
   var ctx=canvas.getContext('2d');
   ctx.scale(dpr,dpr);
-  var PAD={t:18,r:14,b:36,l:42};
+  var PAD={t:22,r:16,b:38,l:48};
   var CW=W-PAD.l-PAD.r, CH=H-PAD.t-PAD.b;
 
   // filter ref to maxM
   var rRef=ref.filter(function(r){return r[0]<=maxM+1;});
   if(!rRef.length) return;
 
-  // Y range
-  var yMin=rRef[0][1], yMax=rRef[rRef.length-1][7];
-  rRef.forEach(function(r){yMin=Math.min(yMin,r[1]);yMax=Math.max(yMax,r[7]);});
-  pts.forEach(function(p){if(p[key]){yMin=Math.min(yMin,p[key]);yMax=Math.max(yMax,p[key]);}});
+  // Y range – guarded against empty/NaN
+  if(!rRef.length){ drawNoData(cid,'Keine Referenzdaten'); return; }
+  var yMin=rRef[0][1]||0, yMax=rRef[rRef.length-1][7]||200;
+  rRef.forEach(function(r){if(r[1]) yMin=Math.min(yMin,r[1]); if(r[7]) yMax=Math.max(yMax,r[7]);});
+  pts.forEach(function(p){if(p[key]&&!isNaN(p[key])){yMin=Math.min(yMin,p[key]);yMax=Math.max(yMax,p[key]);}});
+  if(isNaN(yMin)||isNaN(yMax)||yMin>=yMax){ drawNoData(cid,'Keine gültigen Daten'); return; }
   var rng=yMax-yMin;
   var step=rng>100?20:rng>60?10:rng>30?5:rng>15?2:1;
   yMin=Math.floor((yMin-rng*0.05)/step)*step;
