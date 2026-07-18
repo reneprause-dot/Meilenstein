@@ -1769,8 +1769,10 @@ function renderSteckbrief(){
   html+='<div class="chart-title" style="margin-top:14px">&#9878; Gewichtskurve vs. WHO-Referenz</div>';
   html+='<canvas class="growth-chart" id="chart-weight"></canvas>';
   html+='<div class="chart-legend">';
-  html+='<span class="legend-item"><span class="legend-dot" style="background:rgba(90,185,170,0.5)"></span>Durchschnitt (P25–P75)</span>';
-  html+='<span class="legend-item"><span class="legend-line" style="background:rgba(60,160,145,0.7);border-top:2px dashed rgba(60,160,145,0.7)"></span>Median (P50)</span>';
+  html+='<span class="legend-item"><span class="legend-dot" style="background:rgba(55,165,145,0.6)"></span>Normalbereich (P25–P75)</span>';
+  html+='<span class="legend-item"><span class="legend-dot" style="background:rgba(210,145,30,0.55)"></span>Beobachten (P3–P10 / P90–P97)</span>';
+  html+='<span class="legend-item"><span class="legend-dot" style="background:rgba(200,55,55,0.55)"></span>Kritisch (&lt; P3 / &gt; P97)</span>';
+  html+='<span class="legend-item"><span class="legend-line" style="background:rgba(40,155,140,0.7);border-top:2px dashed rgba(40,155,140,0.7)"></span>Median (P50)</span>';
   html+='</div></div>';
   html+='</div>';
 
@@ -1985,13 +1987,68 @@ function drawGrowthChart(cid,ref,pts,key,unit,maxM,accent,name){
     var yp=ty(y);ctx.beginPath();ctx.moveTo(PAD.l,yp);ctx.lineTo(PAD.l+CW,yp);ctx.stroke();
   }
 
-  // bands P3-P97, P10-P90, P25-P75
-  fillBand(bandPath(1,7),'rgba(150,210,200,0.16)');
-  fillBand(bandPath(2,6),'rgba(100,190,175,0.20)');
-  fillBand(bandPath(3,5),'rgba(60,170,155,0.28)');
+  // KRITISCHE ZONEN (< P3 und > P97) – rote Hinterlegung
+  // Kritisch niedrig: unter P3
+  ctx.beginPath();
+  for(var ki=0;ki<=N;ki++){var km=ki*maxM/N;ki===0?ctx.moveTo(tx(km),ty(refVal(km,1))):ctx.lineTo(tx(km),ty(refVal(km,1)));}
+  ctx.lineTo(PAD.l+CW,PAD.t+CH);ctx.lineTo(PAD.l,PAD.t+CH);ctx.closePath();
+  ctx.fillStyle='rgba(210,60,60,0.12)';ctx.fill();
+  // Kritisch hoch: über P97
+  ctx.beginPath();
+  for(var ki=0;ki<=N;ki++){var km=ki*maxM/N;ki===0?ctx.moveTo(tx(km),ty(refVal(km,7))):ctx.lineTo(tx(km),ty(refVal(km,7)));}
+  ctx.lineTo(PAD.l+CW,PAD.t);ctx.lineTo(PAD.l,PAD.t);ctx.closePath();
+  ctx.fillStyle='rgba(210,60,60,0.12)';ctx.fill();
 
-  // P50 median dashed
+  // BEOBACHTUNGS-ZONEN (P3-P10 und P90-P97) – amber
+  fillBand(bandPath(1,2),'rgba(210,145,30,0.16)');
+  fillBand(bandPath(6,7),'rgba(210,145,30,0.16)');
+
+  // NORMALBEREICHE (P10-P90, P25-P75) – grün
+  fillBand(bandPath(2,6),'rgba(80,180,160,0.18)');
+  fillBand(bandPath(3,5),'rgba(55,165,145,0.26)');
+
+  // Grenzlinien P3 und P97 (gestrichelt rot)
+  strokeCurve(1,'rgba(200,55,55,0.60)',[5,3],1.5);
+  strokeCurve(7,'rgba(200,55,55,0.60)',[5,3],1.5);
+  // Grenzlinien P10 und P90 (gestrichelt amber)
+  strokeCurve(2,'rgba(190,125,25,0.50)',[4,3],1);
+  strokeCurve(6,'rgba(190,125,25,0.50)',[4,3],1);
+
+  // P50 Median
   strokeCurve(4,'rgba(40,155,140,0.75)',[7,5],2);
+
+  // Labels für kritische Zonen
+  ctx.save();
+  ctx.font='bold 9px Inter,system-ui,sans-serif';
+  ctx.textAlign='left';
+  var p3atRight=ty(refVal(maxM*0.8,1));
+  var p97atRight=ty(refVal(maxM*0.8,7));
+  var p10atRight=ty(refVal(maxM*0.8,2));
+  var p90atRight=ty(refVal(maxM*0.8,6));
+  // Low critical label
+  var lowCritY=Math.min(PAD.t+CH-5, (p3atRight+PAD.t+CH)/2+4);
+  ctx.fillStyle='rgba(190,45,45,0.85)';
+  ctx.fillText('< P3 – bitte ärztlich abklären',PAD.l+4,lowCritY);
+  // High critical label
+  var highCritY=Math.max(PAD.t+11,(p97atRight+PAD.t)/2-3);
+  ctx.fillText('> P97 – bitte ärztlich abklären',PAD.l+4,highCritY);
+  // Warning labels (P3-P10 and P90-P97) – only if zone is >= 16px tall
+  if(Math.abs(p3atRight-p10atRight)>=16){
+    ctx.fillStyle='rgba(170,110,20,0.82)';
+    ctx.fillText('P3–P10: Beobachten',PAD.l+4,(p3atRight+p10atRight)/2+4);
+  }
+  if(Math.abs(p90atRight-p97atRight)>=16){
+    ctx.fillStyle='rgba(170,110,20,0.82)';
+    ctx.fillText('P90–P97: Beobachten',PAD.l+4,(p90atRight+p97atRight)/2+4);
+  }
+  // Normal range label in the centre of P25-P75 zone
+  var p25atMid=ty(refVal(maxM*0.4,3));
+  var p75atMid=ty(refVal(maxM*0.4,5));
+  if(Math.abs(p25atMid-p75atMid)>=18){
+    ctx.fillStyle='rgba(35,140,125,0.70)';
+    ctx.fillText('Normalbereich',PAD.l+4,(p25atMid+p75atMid)/2+4);
+  }
+  ctx.restore();
 
   // child data line
   var cPts=pts.filter(function(p){return p[key]!=null;});
