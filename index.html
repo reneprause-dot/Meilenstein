@@ -399,6 +399,23 @@ html.theme-blau body { background:linear-gradient(180deg,#F5F8FF,#F5F8FF); }
 html.theme-blau { background:linear-gradient(180deg,#F5F8FF,#F5F8FF); }
 html.theme-blau .tab-btn.tab-steckbrief { color:#2898A8; }
 html.theme-blau .tab-btn.tab-steckbrief.active { color:#2898A8; border-bottom-color:#2898A8; }
+
+/* SCROLL-TO-TOP BUTTON */
+#scroll-top{position:fixed;bottom:24px;right:18px;width:46px;height:46px;border-radius:50%;background:var(--peach);border:none;color:#fff;font-size:22px;display:none;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.18);z-index:60;cursor:pointer;transition:transform .15s;}
+#scroll-top.vis{display:flex;}
+#scroll-top:hover{transform:scale(1.08);}
+
+/* FAV-WRAP ACCORDION */
+.fav-wrap{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:10px;overflow:hidden;}
+.fav-ws{list-style:none;cursor:pointer;padding:12px 16px;display:flex;align-items:center;gap:10px;}
+.fav-ws::-webkit-details-marker{display:none;}
+.fav-wi{font-size:20px;flex-shrink:0;}
+.fav-wt{flex:1;min-width:0;}
+.fav-wn{font-weight:700;font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.fav-wsub{font-size:11.5px;color:var(--text-dim);margin-top:1px;}
+.fav-wex{font-size:18px;color:var(--peach);font-weight:700;transition:transform .15s;flex-shrink:0;}
+.fav-wrap[open] .fav-wex{transform:rotate(45deg);}
+.fav-wb{padding:0 16px 14px;border-top:1.5px solid var(--border);}
 </style>
 </head>
 <body>
@@ -499,7 +516,8 @@ html.theme-blau .tab-btn.tab-steckbrief.active { color:#2898A8; border-bottom-co
     <div id="al-body"></div>
   </section>
 
-  <footer class="app-footer">MEILENSTEIN · Elternratgeber · Keine Datenübertragung · Offline-fähig</footer>
+  <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Nach oben">&#8593;</button>
+<footer class="app-footer">MEILENSTEIN · Elternratgeber · Keine Datenübertragung · Offline-fähig</footer>
 </div>
 
 <div class="modal-overlay" id="modal-overlay">
@@ -837,6 +855,7 @@ function init(){
   bindModal();
   checkPhaseNotification();
   if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+  restoreAppState();
 }
 
 /* ─── Font Size ───────────────────────────────── */
@@ -1290,59 +1309,97 @@ function renderAidList(){
   `).join('')||'<p style="color:var(--text-dim)">Keine Einträge für diese Altersstufe.</p>';
 }
 
-/* ═══════════════════════════════════════════════════
-   RENDER – FAVORITEN
-═══════════════════════════════════════════════════ */
-function rmFavBtn(id){return '<button class="fav-mini is-fav" data-fav="'+id+'" onclick="toggleFav(\''+id+'\')">\u2665 entfernen</button>';}
+/* ========================================================
+   RENDER - FAVORITEN
+======================================================== */
+function rmFavBtn(id){
+  return '<button class="fav-mini is-fav" data-fav="'+id+'" onclick="toggleFav(\''+id+'\')">&hearts; entfernen</button>';
+}
+
+function wrapFav(id, icon, title, sub, bodyHtml){
+  return '<details class="fav-wrap"><summary class="fav-ws">'
+    +'<span class="fav-wi">'+icon+'</span>'
+    +'<div class="fav-wt"><div class="fav-wn">'+title+'</div>'+(sub?'<div class="fav-wsub">'+sub+'</div>':'')+'</div>'
+    +'<span class="fav-wex">+</span>'+rmFavBtn(id)
+    +'</summary><div class="fav-wb">'+bodyHtml+'</div></details>';
+}
+
 function renderFavs(){
   const el=document.getElementById('favs-list');
   if(!favorites.length){
-    el.innerHTML='<div class="favs-empty"><div class="empty-icon">♡</div><div>Noch keine Favoriten gespeichert.<br>Tippe auf das <strong>♡</strong> auf jeder Karte, um sie hier zu sammeln.</div></div>';
+    el.innerHTML='<div class="favs-empty"><div class="empty-icon">&hearts;</div><div>Noch keine Favoriten gespeichert.<br>Tippe auf das <strong>&#x2661;</strong> auf jeder Karte.</div></div>';
     return;
   }
   const ORDER=['phase','sleep','milestone','food','safety','aid','vaccine'];
-  const LABELS={phase:'🌱 Entwicklungsphasen',sleep:'💤 Schlaf',milestone:'✅ Meilensteine',food:'🍎 Essen & Essverhalten',safety:'🏠 Sicherheit',aid:'🩺 Erste Hilfe',vaccine:'💉 Impfungen'};
-  const grouped={};ORDER.forEach(t=>grouped[t]=[]);
-  favorites.forEach(id=>{const t=getFavType(id);if(t&&grouped[t])grouped[t].push(id);});
+  const LABELS={phase:'Entwicklungsphasen',sleep:'Schlaf',milestone:'Meilensteine',food:'Essen &amp; Essverhalten',safety:'Sicherheit',aid:'Erste Hilfe',vaccine:'Impfungen'};
+  const FICONS={phase:'&#127793;',sleep:'&#128164;',milestone:'&#9989;',food:'&#127822;',safety:'&#127968;',aid:'&#129658;',vaccine:'&#128137;'};
+  const grouped={};ORDER.forEach(function(t){grouped[t]=[];});
+  favorites.forEach(function(id){const t=getFavType(id);if(t&&grouped[t])grouped[t].push(id);});
   let html='';
-  ORDER.forEach(type=>{
+  ORDER.forEach(function(type){
     const ids=grouped[type];if(!ids.length)return;
-    html+='<div class="fav-section-label">'+LABELS[type]+'</div>';
-    ids.forEach(id=>{
-      const rmBtn=rmFavBtn(id);
+    html+='<div class="fav-section-label">'+FICONS[type]+' '+LABELS[type]+'</div>';
+    ids.forEach(function(id){
       if(type==='phase'){
-        const p=PHASES.find(x=>x.id===id);if(!p)return;
-        html+='<div class="phase-card" style="margin-bottom:14px"><div class="phase-head"><div><div class="phase-age">'+p.range+'</div><div class="phase-name">'+p.name+'</div><div class="phase-tag">'+p.tag+'</div></div>'+rmBtn+'</div><div class="cat-grid">'+Object.entries(p.cats).map(([c,items])=>'<div class="cat"><h4>'+c+'</h4><ul>'+items.map(i=>'<li>'+i+'</li>').join('')+'</ul></div>').join('')+'</div></div>';
+        const p=PHASES.find(function(x){return x.id===id;});if(!p)return;
+        const body='<div class="cat-grid" style="padding-top:12px">'+Object.entries(p.cats).map(function(e){return '<div class="cat"><h4>'+e[0]+'</h4><ul>'+e[1].map(function(i){return '<li>'+i+'</li>';}).join('')+'</ul></div>';}).join('')+'</div>';
+        html+=wrapFav(p.id,FICONS.phase,p.name,p.range+' &middot; '+p.tag,body);
       } else if(type==='sleep'){
         const idx=parseInt(id.replace('sl',''));const s=SLEEP_DATA[idx];if(!s)return;
-        html+='<div class="sleep-card" style="margin-bottom:12px"><div style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1.5px solid var(--border)"><div><div class="s-age">'+s.range+'</div><div class="s-hours">'+s.total+' Schlaf</div></div>'+rmBtn+'</div><div class="sleep-body"><div class="sleep-stats"><div class="sleep-stat"><div class="st-label">Gesamt</div><div class="st-val">'+s.total+'</div></div><div class="sleep-stat"><div class="st-label">Nacht</div><div class="st-val">'+s.night+'</div></div><div class="sleep-stat"><div class="st-label">Schläfchen</div><div class="st-val">'+s.naps+'</div></div></div><div class="sleep-tips"><h5>Tipps</h5><ul>'+s.tips.map(t=>'<li>'+t+'</li>').join('')+'</ul></div><div class="sleep-probs"><h5>Häufige Probleme</h5><ul>'+s.probs.map(t=>'<li>'+t+'</li>').join('')+'</ul></div></div></div>';
+        const body='<div class="sleep-body">'
+          +'<div class="sleep-stats">'
+          +'<div class="sleep-stat"><div class="st-label">Gesamt</div><div class="st-val">'+s.total+'</div></div>'
+          +'<div class="sleep-stat"><div class="st-label">Nacht</div><div class="st-val">'+s.night+'</div></div>'
+          +'<div class="sleep-stat"><div class="st-label">Schl&auml;fchen</div><div class="st-val">'+s.naps+'</div></div>'
+          +'</div><div class="sleep-tips"><h5>Tipps</h5><ul>'+s.tips.map(function(t){return '<li>'+t+'</li>';}).join('')+'</ul></div>'
+          +'<div class="sleep-probs"><h5>H&auml;ufige Probleme</h5><ul>'+s.probs.map(function(t){return '<li>'+t+'</li>';}).join('')+'</ul></div></div>';
+        html+=wrapFav(id,FICONS.sleep,s.range,s.total+' Schlaf',body);
       } else if(type==='milestone'){
-        const mg=MILESTONES.find(x=>x.id===id);if(!mg)return;
+        const mg=MILESTONES.find(function(x){return x.id===id;});if(!mg)return;
         const pc=checks[activeProfileId]||{};
-        const done=mg.items.filter(it=>pc[it.id]).length;
-        html+='<div class="ms-group" style="margin-bottom:12px"><div class="ms-head"><div class="ms-age">'+mg.lbl+'</div><div style="display:flex;gap:8px;align-items:center"><span class="ms-progress">'+done+'/'+mg.items.length+'</span>'+rmBtn+'</div></div><div class="ms-items">'+mg.items.map(it=>'<div class="ms-item'+(pc[it.id]?' checked':'')+'"><div class="ms-check">'+(pc[it.id]?'✓':'')+'</div><div class="ms-text"><span class="badge '+BADGE[it.cat]+'">'+BADGE_LBL[it.cat]+'</span>'+it.text+'</div></div>').join('')+'</div></div>';
+        const done=mg.items.filter(function(it){return pc[it.id];}).length;
+        const body='<div class="ms-items" style="padding-top:10px">'
+          +mg.items.map(function(it){
+            return '<div class="ms-item'+(pc[it.id]?' checked':'')+'">'+'<div class="ms-check">'+(pc[it.id]?'&#10003;':'')+'</div>'
+              +'<div class="ms-text"><span class="badge '+BADGE[it.cat]+'">'+BADGE_LBL[it.cat]+'</span>'+it.text+'</div></div>';
+          }).join('')+'</div>';
+        html+=wrapFav(mg.id,FICONS.milestone,mg.lbl,done+'/'+mg.items.length+' erledigt',body);
       } else if(type==='food'){
-        const t=FOOD_TOPICS.find(x=>x.id===id);if(!t)return;
-        let body='';
-        if(t.typical?.length) body+='<h5>Was typisch ist</h5><ul>'+t.typical.map(s=>'<li>'+s+'</li>').join('')+'</ul>';
-        if(t.tips?.length) body+='<h5>Tipps für Eltern</h5><ul>'+t.tips.map(s=>'<li>'+s+'</li>').join('')+'</ul>';
-        if(t.refusal?.length) body+='<div class="box-alert box-peach"><strong>Wenn das Kind ablehnt:</strong><ul>'+t.refusal.map(s=>'<li>'+s+'</li>').join('')+'</ul></div>';
-        if(t.avoid?.length) body+='<div class="box-alert box-amber"><strong>Besser meiden:</strong><ul>'+t.avoid.map(s=>'<li>'+s+'</li>').join('')+'</ul></div>';
-        html+='<div class="expand-card food" style="margin-bottom:12px"><div style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1.5px solid var(--border)"><span style="font-family:var(--ff-display);font-size:16px;font-weight:700">'+t.title+'</span>'+rmBtn+'</div><div class="ec-body">'+body+'</div></div>';
+        const t=FOOD_TOPICS.find(function(x){return x.id===id;});if(!t)return;
+        let body='<div class="ec-body">';
+        if(t.typical&&t.typical.length) body+='<h5>Was typisch ist</h5><ul>'+t.typical.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ul>';
+        if(t.tips&&t.tips.length) body+='<h5>Tipps f&uuml;r Eltern</h5><ul>'+t.tips.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ul>';
+        if(t.refusal&&t.refusal.length) body+='<div class="box-alert box-peach"><strong>Wenn das Kind ablehnt:</strong><ul>'+t.refusal.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ul></div>';
+        if(t.avoid&&t.avoid.length) body+='<div class="box-alert box-amber"><strong>Besser meiden:</strong><ul>'+t.avoid.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ul></div>';
+        body+='</div>';
+        const ageSub=t.ages?t.ages.map(function(a){const g=FOOD_AGES.find(function(x){return x.id===a;});return g?g.lbl:a;}).join(', '):'alle Altersstufen';
+        html+=wrapFav(t.id,FICONS.food,t.title,ageSub,body);
       } else if(type==='safety'){
         const idx=parseInt(id.replace('sa',''));const s=SAFETY_DATA[idx];if(!s)return;
-        html+='<div class="safety-card" style="margin-bottom:12px"><div style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1.5px solid var(--border)"><div><div class="sa-age">'+s.range+'</div><div class="sa-title">Sicherheit &amp; Medienzeit</div></div>'+rmBtn+'</div><div class="safety-body"><div class="safety-section hazards"><h5>⚠ Gefahrenquellen</h5><ul>'+s.hazards.map(h=>'<li>'+h+'</li>').join('')+'</ul></div><div class="safety-section screen" style="margin-top:16px"><h5>📱 Bildschirmzeit</h5><ul>'+s.screen.map(sc=>'<li>'+sc+'</li>').join('')+'</ul></div></div></div>';
+        const body='<div class="safety-body">'
+          +'<div class="safety-section hazards"><h5>&#9888; Gefahrenquellen</h5><ul>'+s.hazards.map(function(h){return '<li>'+h+'</li>';}).join('')+'</ul></div>'
+          +'<div class="safety-section screen" style="margin-top:14px"><h5>&#128241; Bildschirmzeit</h5><ul>'+s.screen.map(function(sc){return '<li>'+sc+'</li>';}).join('')+'</ul></div>'
+          +'</div>';
+        html+=wrapFav(id,FICONS.safety,'Sicherheit &amp; Medienzeit',s.range,body);
       } else if(type==='aid'){
-        const a=FIRST_AID.find(x=>x.id===id);if(!a)return;
-        html+='<div class="expand-card aid" style="margin-bottom:12px"><div style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1.5px solid var(--border)"><span style="font-family:var(--ff-display);font-size:16px;font-weight:700">'+a.title+'</span>'+rmBtn+'</div><div class="ec-body"><h5>Sofortmaßnahmen</h5><ol>'+a.steps.map(s=>'<li>'+s+'</li>').join('')+'</ol><div class="box-alert box-red"><strong>Notruf/Arzt, wenn:</strong> '+a.emergency+'</div></div></div>';
+        const a=FIRST_AID.find(function(x){return x.id===id;});if(!a)return;
+        const body='<div class="ec-body"><h5>Sofortma&szlig;nahmen</h5><ol>'
+          +a.steps.map(function(s){return '<li>'+s+'</li>';}).join('')
+          +'</ol><div class="box-alert box-red"><strong>Notruf/Arzt, wenn:</strong> '+a.emergency+'</div></div>';
+        const sub=a.ages.map(function(x){const g=AID_AGES.find(function(ag){return ag.id===x;});return g?g.lbl:x;}).join(', ');
+        html+=wrapFav(a.id,FICONS.aid,a.title,sub,body);
       } else if(type==='vaccine'){
-        const g=VACCINES.find(x=>x.id===id);if(!g)return;
+        const g=VACCINES.find(function(x){return x.id===id;});if(!g)return;
         const pv=vaccs[activeProfileId]||{};
-        const done=g.items.filter(it=>pv[it.id]).length;
+        const done=g.items.filter(function(it){return pv[it.id];}).length;
         const gSt=vaccGroupStatus(g);
-        const stCol={done:'var(--mint)',due:'var(--rose)',soon:'var(--amber)',upcoming:'var(--text-dim)',na:'var(--text-dim)'};
-        const stLbl={done:'Erledigt',due:'Jetzt fällig',soon:'Demnächst',upcoming:'Noch offen',na:''};
-        html+='<div class="vacc-group" style="margin-bottom:12px"><div class="vacc-head"><div><div class="vacc-age">'+g.age+'</div><div class="vacc-title">'+g.tag+'</div></div><div style="display:flex;gap:6px;align-items:center">'+(gSt!=='na'?'<span class="vacc-status status-'+gSt+'">'+stLbl[gSt]+'</span>':'')+rmBtn+'</div></div><div style="padding:4px 18px 6px;font-size:12px;color:var(--text-dim)">'+done+'/'+g.items.length+' abgehakt</div><div class="vacc-items">'+g.items.map(it=>'<div class="vacc-item'+(pv[it.id]?' checked':'')+'"><div class="vacc-item-head" style="cursor:default"><div class="vacc-check">'+(pv[it.id]?'✓':'')+'</div><div class="vacc-item-name"><div class="vacc-name">'+it.name+'</div><div class="vacc-abbr">'+it.abbr+'</div></div><span class="vacc-dose">'+it.dose+'</span></div><div class="vacc-desc" style="display:block">'+it.desc+'</div></div>').join('')+'</div></div>';
+        const stL={done:'Erledigt',due:'Jetzt f&auml;llig',soon:'Demn&auml;chst',upcoming:'Noch offen',na:''};
+        const body='<div class="vacc-items" style="padding-top:8px">'
+          +g.items.map(function(it){
+            return '<div class="vacc-item'+(pv[it.id]?' checked'  :'')+'">'+'<div class="vacc-item-head" style="cursor:default">'+'<div class="vacc-check">'+(pv[it.id]?'&#10003;':'')+'</div>'+'<div class="vacc-item-name"><div class="vacc-name">'+it.name+'</div><div class="vacc-abbr">'+it.abbr+'</div></div>'+'<span class="vacc-dose">'+it.dose+'</span></div>'+'<div class="vacc-desc" style="display:block">'+it.desc+'</div></div>';
+          }).join('')+'</div>';
+        const sub=done+'/'+g.items.length+' abgehakt'+(gSt!=='na'?' &middot; '+stL[gSt]:'');
+        html+=wrapFav(g.id,FICONS.vaccine,g.age,sub,body);
       }
     });
   });
@@ -1801,6 +1858,25 @@ function bindSearch(){
 }
 
 /* ─── Start ───────────────────────────────────── */
+/* --- Scroll-to-top ---- */
+window.addEventListener('scroll',function(){
+  var b=document.getElementById('scroll-top');
+  if(b) b.classList.toggle('vis',window.scrollY>200);
+},{passive:true});
+
+/* --- App state save / restore ---- */
+function saveAppState(){
+  var tab=document.querySelector('.tab-btn.active');
+  store('ms_app_state',{tab:tab?tab.dataset.view:'steckbrief',scrollY:Math.round(window.scrollY)});
+}
+function restoreAppState(){
+  var s=retrieve('ms_app_state',null);if(!s)return;
+  if(s.tab){var btn=document.querySelector('.tab-btn[data-view="'+s.tab+'"]');if(btn)btn.click();}
+  if(s.scrollY>0)setTimeout(function(){window.scrollTo({top:s.scrollY,behavior:'instant'});},100);
+}
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')saveAppState();});
+window.addEventListener('pagehide',saveAppState);
+
 init();
 </script>
 </body>
