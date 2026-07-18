@@ -237,6 +237,105 @@ button { font-family:inherit; cursor:pointer; }
 .btn-primary { background:var(--peach); border:none; border-radius:10px; color:#fff; padding:12px 20px; font-size:15px; font-weight:700; width:100%; margin-top:6px; }
 .btn-danger { background:var(--rose-bg); border:1.5px solid var(--rose); border-radius:10px; color:var(--rose); padding:10px 20px; font-size:13.5px; font-weight:600; width:100%; margin-top:8px; }
 
+/* VACCINES */
+.vacc-group { background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); margin-bottom:12px; overflow:hidden; }
+.vacc-head { padding:14px 18px; display:flex; align-items:flex-start; justify-content:space-between; gap:10px; flex-wrap:wrap; border-bottom:1.5px solid var(--border); }
+.vacc-age { font-size:11.5px; font-weight:700; color:var(--peach); }
+.vacc-title { font-family:var(--ff-display); font-size:16px; font-weight:700; margin:2px 0 0; }
+.vacc-tag { font-size:12px; color:var(--text-dim); font-style:italic; }
+.vacc-status { flex-shrink:0; font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; white-space:nowrap; align-self:flex-start; }
+.status-done { background:var(--mint-bg); color:var(--mint); }
+.status-due { background:var(--rose-bg); color:var(--rose); }
+.status-soon { background:var(--amber-bg); color:var(--amber); }
+.status-upcoming { background:var(--sky-bg); color:var(--sky); }
+.status-na { display:none; }
+.vacc-info { padding:10px 18px; background:var(--peach-bg); border-bottom:1.5px solid var(--border); font-size:.85rem; color:var(--peach); }
+.vacc-items { padding:10px 18px 14px; display:flex; flex-direction:column; gap:10px; }
+.vacc-item { background:var(--bg); border:1.5px solid var(--border); border-radius:10px; overflow:hidden; }
+.vacc-item-head { display:flex; align-items:center; gap:10px; padding:10px 12px; cursor:pointer; }
+.vacc-check { flex-shrink:0; width:20px; height:20px; border:2px solid var(--border); border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:12px; background:var(--surface); transition:all .15s; }
+.vacc-item.checked .vacc-check { background:var(--mint); border-color:var(--mint); color:#fff; }
+.vacc-item-name { flex:1; }
+.vacc-name { font-size:.9rem; font-weight:700; }
+.vacc-abbr { font-size:11px; color:var(--text-dim); }
+.vacc-dose { font-size:11px; color:var(--peach); font-weight:600; margin-left:auto; white-space:nowrap; }
+.vacc-desc { padding:0 12px 10px 42px; font-size:.84rem; color:var(--text-dim); line-height:1.5; display:none; }
+.vacc-item.open .vacc-desc { display:block; }
+.vacc-disclaimer { background:var(--sky-bg); border:1.5px solid rgba(90,159,212,.3); border-radius:var(--radius); padding:12px 15px; font-size:.88rem; margin-bottom:18px; display:flex; gap:10px; }
+.vacc-disclaimer strong { color:var(--sky); }
+.vacc-progress-bar { height:5px; background:var(--border); border-radius:3px; margin:6px 0 2px; overflow:hidden; }
+.vacc-progress-fill { height:100%; background:var(--mint); border-radius:3px; transition:width .3s; }
+
+/* TAB – FAVORITEN hervorgehoben */
+.tab-btn.tab-favs { color:var(--rose); font-weight:700; }
+.tab-btn.tab-favs.active { color:var(--rose); border-bottom-color:var(--rose); }
+
+/* STECKBRIEF */
+.sb-card { background:var(--surface); border:2px solid var(--mint); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px 22px; margin-bottom:16px; }
+.sb-profile-row { display:flex; align-items:center; gap:16px; margin-bottom:16px; padding-bottom:16px; border-bottom:1.5px solid var(--border); flex-wrap:wrap; }
+.sb-emoji { font-size:42px; line-height:1; }
+.sb-info { flex:1; min-width:140px; }
+.sb-name { font-family:var(--ff-display); font-size:22px; font-weight:700; margin:0 0 2px; }
+.sb-meta { font-size:13px; color:var(--text-dim); }
+.sb-phase-badge { display:inline-block; background:var(--mint-bg); color:var(--mint); font-size:12px; font-weight:700; padding:3px 10px; border-radius:999px; margin-top:6px; }
+.sb-share { background:var(--peach-bg); border:1.5px solid var(--peach); border-radius:10px; color:var(--peach); padding:8px 14px; font-size:13px; font-weight:700; flex-shrink:0; align-self:flex-start; }
+.sb-section { margin-bottom:16px; }
+.sb-section-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--text-dim); margin:0 0 10px; }
+.sb-allergen-chips { display:flex; flex-wrap:wrap; gap:7px; }
+.sb-chip { background:var(--rose-bg); border:1.5px solid rgba(224,120,120,.35); color:var(--rose); border-radius:999px; padding:5px 12px; font-size:13px; font-weight:600; }
+.sb-custom-note { background:var(--bg); border:1.5px solid var(--border); border-radius:10px; padding:10px 13px; font-size:.88rem; color:var(--text); white-space:pre-wrap; margin-top:8px; }
+.sb-empty { color:var(--text-dim); font-size:.88rem; font-style:italic; }
+.sb-aid-list { display:flex; flex-direction:column; gap:8px; }
+.sb-aid-item { background:var(--rose-bg); border:1.5px solid rgba(224,120,120,.25); border-radius:10px; padding:11px 14px; }
+.sb-aid-name { font-weight:700; font-size:.9rem; color:var(--rose); margin-bottom:6px; }
+.sb-aid-steps { font-size:.82rem; color:var(--text); padding-left:16px; margin:0; }
+.sb-aid-steps li { margin-bottom:3px; }
+.sb-no-profile { text-align:center; padding:40px 20px; color:var(--text-dim); }
+.sb-no-profile .no-icon { font-size:36px; margin-bottom:10px; }
+.sb-divider { border:none; border-top:1.5px solid var(--border); margin:14px 0; }
+
+/* ALLERGIEN */
+.al-header-box { background:var(--rose-bg); border:1.5px solid rgba(224,120,120,.3); border-radius:var(--radius); padding:14px 16px; margin-bottom:18px; min-height:52px; display:flex; flex-wrap:wrap; align-items:center; gap:7px; }
+.al-header-chip { background:var(--rose); color:#fff; border-radius:999px; padding:4px 11px; font-size:12.5px; font-weight:700; display:flex; align-items:center; gap:4px; }
+.al-empty-hint { color:var(--text-dim); font-size:.88rem; font-style:italic; }
+.al-no-profile { background:var(--amber-bg); border:1.5px solid var(--amber); border-radius:var(--radius); padding:13px 16px; font-size:.9rem; color:var(--amber); margin-bottom:16px; }
+.al-stitle { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--text-dim); margin:16px 0 10px; padding-top:14px; border-top:1.5px solid var(--border); }
+.al-stitle:first-of-type { border-top:none; padding-top:0; margin-top:0; }
+.al-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:8px; }
+.al-item { background:var(--surface); border:1.5px solid var(--border); border-radius:10px; padding:9px 11px; display:flex; align-items:flex-start; gap:8px; cursor:pointer; user-select:none; }
+.al-item:hover { border-color:var(--rose); }
+.al-item.sel { background:var(--rose-bg); border-color:var(--rose); }
+.al-icon { font-size:18px; flex-shrink:0; margin-top:1px; }
+.al-texts { flex:1; }
+.al-label { font-size:13px; font-weight:700; }
+.al-sub { font-size:10.5px; color:var(--text-dim); margin-top:1px; }
+.al-item.sel .al-sub { color:var(--rose); opacity:.8; }
+.al-cb { margin-left:auto; width:18px; height:18px; border:2px solid var(--border); border-radius:5px; display:flex; align-items:center; justify-content:center; font-size:11px; flex-shrink:0; margin-top:1px; }
+.al-item.sel .al-cb { background:var(--rose); border-color:var(--rose); color:#fff; }
+.al-textarea { width:100%; background:var(--bg); border:1.5px solid var(--border); border-radius:10px; padding:11px 13px; font-family:var(--ff-body); font-size:14px; color:var(--text); min-height:80px; resize:vertical; margin-top:6px; }
+.al-textarea:focus { outline:none; border-color:var(--rose); }
+.al-save { background:var(--rose); border:none; border-radius:10px; color:#fff; padding:10px 20px; font-size:14px; font-weight:700; margin-top:10px; width:100%; }
+
+/* WACHSTUM */
+.growth-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-top:10px; }
+.growth-field { display:flex; flex-direction:column; gap:5px; }
+.growth-field label { font-size:10.5px; font-weight:700; color:var(--text-dim); text-transform:uppercase; letter-spacing:.05em; }
+.growth-input { background:var(--bg); border:1.5px solid var(--border); border-radius:10px; padding:10px 12px; font-family:var(--ff-body); font-size:15px; color:var(--text); width:100%; }
+.growth-input:focus { outline:none; border-color:var(--sky); }
+.growth-unit { display:flex; align-items:center; background:var(--sky-bg); border:1.5px solid rgba(90,159,212,.25); border-radius:10px; padding:10px 12px; font-size:13px; font-weight:700; color:var(--sky); }
+.growth-save { background:var(--sky); border:none; border-radius:10px; color:#fff; padding:10px 18px; font-size:13.5px; font-weight:700; margin-top:10px; }
+.growth-history { margin-top:14px; display:flex; flex-direction:column; gap:6px; }
+.growth-entry { display:flex; align-items:center; justify-content:space-between; background:var(--sky-bg); border:1.5px solid rgba(90,159,212,.2); border-radius:10px; padding:9px 14px; }
+.growth-entry-date { font-size:11.5px; color:var(--text-dim); }
+.growth-entry-vals { display:flex; gap:12px; }
+.growth-val { font-size:13px; font-weight:700; color:var(--sky); }
+.growth-val span { font-weight:400; font-size:11px; color:var(--text-dim); }
+.growth-del { background:none; border:none; color:var(--text-dim); font-size:14px; padding:0 4px; cursor:pointer; }
+.growth-del:hover { color:var(--rose); }
+.growth-badges { display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+.growth-badge { background:var(--sky-bg); border:1.5px solid rgba(90,159,212,.3); border-radius:999px; padding:4px 12px; font-size:12.5px; font-weight:700; color:var(--sky); }
+.growth-empty { color:var(--text-dim); font-size:.88rem; font-style:italic; }
+
 /* FOOTER */
 .app-footer { margin-top:36px; padding:14px 0; border-top:1.5px solid var(--border); font-size:11.5px; color:var(--text-dim); }
 
@@ -277,16 +376,27 @@ button { font-family:inherit; cursor:pointer; }
   </header>
 
   <nav class="tabbar">
-    <button class="tab-btn active" data-view="phases">Phasen</button>
+    <button class="tab-btn tab-favs active" data-view="favs">♥ Favoriten</button>
+    <button class="tab-btn" data-view="steckbrief">🧬 Steckbrief</button>
+    <button class="tab-btn" data-view="phases">Phasen</button>
     <button class="tab-btn" data-view="sleep">Schlaf</button>
     <button class="tab-btn" data-view="milestones">Meilensteine ✓</button>
     <button class="tab-btn" data-view="food">Essen</button>
     <button class="tab-btn" data-view="safety">Sicherheit</button>
     <button class="tab-btn" data-view="aid">Erste Hilfe</button>
-    <button class="tab-btn" data-view="favs">Favoriten ♥</button>
+    <button class="tab-btn" data-view="allergies">🌿 Allergien</button>
+    <button class="tab-btn" data-view="vaccines">Impfungen 💉</button>
   </nav>
 
-  <section id="view-phases" class="view active">
+  <section id="view-favs" class="view active">
+    <div id="favs-list"></div>
+  </section>
+
+  <section id="view-steckbrief" class="view">
+    <div id="steckbrief-content"></div>
+  </section>
+
+  <section id="view-phases" class="view">
     <div class="phases-layout">
       <div class="ruler" id="ruler"></div>
       <div class="phase-list" id="phase-list"></div>
@@ -319,6 +429,17 @@ button { font-family:inherit; cursor:pointer; }
 
   <section id="view-favs" class="view">
     <div id="favs-list"></div>
+  </section>
+
+  <section id="view-vaccines" class="view">
+    <div class="vacc-disclaimer"><span>ℹ️</span><div><strong>Individuelle Beratung beim Kinderarzt.</strong> Dieser Impfplan basiert auf den aktuellen STIKO-Empfehlungen (Stand 2024). Impfabstände und individuelle Besonderheiten bitte immer mit der Kinderarztpraxis absprechen.</div></div>
+    <div id="vacc-list"></div>
+  </section>
+
+  <section id="view-allergies" class="view">
+    <div id="al-header-box" class="al-header-box"><span class="al-empty-hint">Noch keine Allergene ausgewählt …</span></div>
+    <div id="al-no-profile" class="al-no-profile" style="display:none">⚠️ Bitte zuerst ein Kind-Profil anlegen, um Allergien zu speichern.</div>
+    <div id="al-body"></div>
   </section>
 
   <footer class="app-footer">MEILENSTEIN · Elternratgeber · Keine Datenübertragung · Offline-fähig</footer>
@@ -508,6 +629,103 @@ const FIRST_AID = [
 ];
 
 /* ═══════════════════════════════════════════════════
+   DATA – IMPFUNGEN (STIKO 2024)
+═══════════════════════════════════════════════════ */
+const VACCINES = [
+  { id:'vg0', age:'Geburt (innerhalb 12 Std.)', monthsMin:0, monthsMax:0.5,
+    tag:'Direkt nach der Geburt', info:'In Krankenhäusern wird die erste Hepatitis-B-Impfung direkt nach der Geburt angeboten – besonders wichtig, wenn die Mutter HBsAg-positiv ist.',
+    items:[
+      {id:'vi01',name:'Hepatitis B',abbr:'HepB',dose:'1. Dosis',desc:'Schutz vor chronischer Leberentzündung durch das Hepatitis-B-Virus. Kann bereits bei der Geburt übertragen werden – frühestmögliche Impfung ist entscheidend.'}
+    ]},
+  { id:'vg1', age:'Ab 6. Lebenswoche', monthsMin:1.5, monthsMax:3.5,
+    tag:'Strikte Zeitvorgabe beachten', info:'Die Rotavirus-Schluckimpfung muss nach strengen Zeitvorgaben abgeschlossen sein: spätestens mit der 32. Lebenswoche (bestimmte Impfstoffe bereits mit der 24. Woche).',
+    items:[
+      {id:'vi11',name:'Rotaviren',abbr:'RV',dose:'1. Dosis (Schluckimpfung)',desc:'Schutz vor schweren Durchfall-Erkrankungen durch Rotaviren – häufigste Ursache von Durchfall-Krankenhausaufenthalten bei Säuglingen unter 5 Jahren.'}
+    ]},
+  { id:'vg2', age:'2. Lebensmonat', monthsMin:2, monthsMax:3,
+    tag:'Erste Kombi-Impfung', info:'Die 6-fach-Impfung ist die wichtigste Basisimpfung des Säuglingsalters und schützt in einer einzigen Spritze gegen sechs schwere Erkrankungen.',
+    items:[
+      {id:'vi21',name:'6-fach-Impfung',abbr:'DTaP-IPV-Hib-HepB',dose:'1. Dosis',desc:'Kombinationsschutz gegen Diphtherie, Tetanus (Wundstarrkrampf), Pertussis (Keuchhusten), Polio (Kinderlähmung), Hib-Meningitis und Hepatitis B.'},
+      {id:'vi22',name:'Pneumokokken',abbr:'PCV13/15',dose:'1. Dosis',desc:'Schutz vor Pneumokokken-Bakterien, die Hirnhautentzündung, Lungenentzündung und Mittelohrentzündung verursachen können.'},
+      {id:'vi23',name:'Rotaviren',abbr:'RV',dose:'2. Dosis',desc:'Zweite Dosis der oralen Rotavirus-Schluckimpfung.'}
+    ]},
+  { id:'vg3', age:'3. Lebensmonat (je nach Impfstoff)', monthsMin:3, monthsMax:4,
+    tag:'Mit Kinderarzt klären', info:'Ob eine Impfung im 3. Monat nötig ist, hängt vom verwendeten Rotavirus-Impfstoff ab. Die 6-fach-Impfung wird bei einem beschleunigten Schema auch im 3. Monat gegeben.',
+    items:[
+      {id:'vi31',name:'6-fach-Impfung',abbr:'DTaP-IPV-Hib-HepB',dose:'2. Dosis',desc:'Zweite Dosis der Grundimmunisierung – bei beschleunigtem 2+1-Schema können 2. und 3. Dosis zusammenfallen.'},
+      {id:'vi32',name:'Rotaviren (opt.)',abbr:'RV',dose:'3. Dosis (nur bei 3-Dosen-Impfstoff)',desc:'Nur bei bestimmten Impfstoffen (z. B. RotaTeq®) notwendig. Mit der Kinderarztpraxis absprechen, welcher Impfstoff verwendet wird.'}
+    ]},
+  { id:'vg4', age:'4. Lebensmonat', monthsMin:4, monthsMax:5,
+    tag:'Zweiter Kombi-Termin', info:'Meningokokken B ist seit den STIKO-Empfehlungen 2024 eine Standardimpfung für alle Säuglinge – sie ergänzt den Schutz gegen die gefährlichste Meningokokken-Gruppe.',
+    items:[
+      {id:'vi41',name:'6-fach-Impfung',abbr:'DTaP-IPV-Hib-HepB',dose:'3. Dosis',desc:'Dritte Dosis der 6-fach-Kombinationsimpfung – schließt die Grundimmunisierung noch nicht ab, die Auffrischung folgt im 2. Lebensjahr.'},
+      {id:'vi42',name:'Pneumokokken',abbr:'PCV',dose:'2. Dosis',desc:'Zweite Pneumokokken-Schutzimpfung.'},
+      {id:'vi43',name:'Meningokokken B',abbr:'MenB',dose:'1. Dosis',desc:'Schutz vor Meningokokken-B-Hirnhautentzündung – STIKO-Standardimpfung seit 2024. Meningokokken B ist in Deutschland die häufigste Meningokokken-Gruppe.'}
+    ]},
+  { id:'vg5', age:'11.–14. Lebensmonat', monthsMin:11, monthsMax:14,
+    tag:'Wichtigster Bündeltermin', info:'Dieser Termin enthält viele Impfungen auf einmal und schließt die Grundimmunisierung ab. Er sollte unbedingt eingehalten werden – Versäumnisse jetzt nachholen!',
+    items:[
+      {id:'vi51',name:'6-fach-Impfung',abbr:'DTaP-IPV-Hib-HepB',dose:'4. Dosis (Auffrischung)',desc:'Letzte Dosis der 6-fach-Grundimmunisierung – wichtig für langfristigen Schutz.'},
+      {id:'vi52',name:'Pneumokokken',abbr:'PCV',dose:'3. Dosis (Auffrischung)',desc:'Abschluss der Pneumokokken-Grundimmunisierung.'},
+      {id:'vi53',name:'Masern, Mumps, Röteln, Varizellen',abbr:'MMRV',dose:'1. Dosis',desc:'Schutz vor Masern, Mumps, Röteln (in der Schwangerschaft gefährlich!) und Windpocken. Masernimpfung ist für Kita- und Schulkinder gesetzlich vorgeschrieben (§20 IfSG).'},
+      {id:'vi54',name:'Meningokokken C',abbr:'MenC',dose:'1. Dosis',desc:'Schutz vor Meningokokken-C-Erkrankungen (Hirnhautentzündung, Sepsis). Einmalige Impfung reicht für dauerhaften Schutz.'},
+      {id:'vi55',name:'Meningokokken B',abbr:'MenB',dose:'2. Dosis (Auffrischung)',desc:'Zweite und letzte Dosis Meningokokken-B-Schutz im Säuglingsalter.'}
+    ]},
+  { id:'vg6', age:'15.–23. Lebensmonat', monthsMin:15, monthsMax:23,
+    tag:'MMR-V abschließen', info:'Die zweite MMRV-Dosis ist entscheidend für vollständigen Masern-Schutz. Mindestabstand zur ersten Dosis: 4 Wochen. Masernimpfnachweis für Kita und Schule Pflicht.',
+    items:[
+      {id:'vi61',name:'Masern, Mumps, Röteln, Varizellen',abbr:'MMRV',dose:'2. Dosis',desc:'Zweite und abschließende MMRV-Dosis. Erst nach beiden Dosen gilt das Kind als vollständig gegen Masern geschützt und erfüllt die gesetzliche Nachweispflicht.'}
+    ]},
+  { id:'vg7', age:'5.–6. Lebensjahr', monthsMin:60, monthsMax:72,
+    tag:'Vor Schuleintritt', info:'Diese Auffrischimpfungen sollten vor Schuleintritt erfolgen – in der Schule ist der Kontakt zu vielen anderen Kindern hoch, der Immunschutz sollte aktuell sein.',
+    items:[
+      {id:'vi71',name:'Diphtherie, Tetanus, Pertussis, Polio',abbr:'DTaP-IPV',dose:'1. Auffrischung',desc:'Erste Auffrischung des Basisschutzes gegen Diphtherie, Tetanus, Keuchhusten und Kinderlähmung. Pertussis-Auffrischung ist besonders wichtig, da der Schutz aus dem Säuglingsalter nachlässt.'}
+    ]},
+  { id:'vg8', age:'9.–14. Lebensjahr', monthsMin:108, monthsMax:168,
+    tag:'HPV für Mädchen UND Jungen', info:'STIKO empfiehlt HPV-Impfung ausdrücklich für beide Geschlechter. Optimaler Zeitpunkt: vor dem ersten Sexualkontakt. Zwischen 9–14 Jahren genügen 2 Dosen, ab 15 Jahren sind 3 Dosen nötig.',
+    items:[
+      {id:'vi81',name:'Humane Papillomviren',abbr:'HPV',dose:'2 Dosen (9–14 J.) / 3 Dosen (ab 15 J.)',desc:'Schutz vor HPV-bedingten Krebserkrankungen: Gebärmutterhalskrebs, Anal-, Mund-Rachen- und Peniskrebs sowie Genitalwarzen. Kostenübernahme durch Krankenkassen bis 17 Jahre.'},
+      {id:'vi82',name:'Meningokokken ACWY',abbr:'MenACWY',dose:'1 Dosis',desc:'Erweiterter Meningokokken-Schutz gegen die Serotypen A, C, W, Y – besonders relevant für Jugendliche und junge Erwachsene in Gemeinschaftseinrichtungen.'}
+    ]},
+  { id:'vg9', age:'11.–17. Lebensjahr', monthsMin:132, monthsMax:204,
+    tag:'Jugend-Auffrischungen', info:'Diese Auffrischimpfungen sollten bis zum 18. Geburtstag abgeschlossen sein. Versäumte Impfungen der Kindheit können jetzt ebenfalls nachgeholt werden.',
+    items:[
+      {id:'vi91',name:'Diphtherie, Tetanus, Pertussis, Polio',abbr:'Tdap-IPV',dose:'2. Auffrischung',desc:'Zweite Auffrischung des Basisschutzes. Pertussis (Keuchhusten) nimmt bei Jugendlichen und Erwachsenen wieder zu – Auffrischung schützt auch Säuglinge in der Umgebung.'},
+      {id:'vi92',name:'Hepatitis B (Nachholimpfung)',abbr:'HepB',dose:'Grundimmunisierung falls unvollständig',desc:'Falls in der Kindheit nicht vollständig geimpft: Jetzt komplette Grundimmunisierung (3 Dosen) nachholen.'},
+      {id:'vi93',name:'Masern (Nachholimpfung)',abbr:'MMR',dose:'falls weniger als 2 Dosen',desc:'Alle nach 1970 geborenen Personen ohne Nachweis von 2 Masernimpfungen sollten fehlende Dosen nachholen – auch als Erwachsene.'}
+    ]}
+];
+
+/* ═══════════════════════════════════════════════════
+   DATA – ALLERGENE
+═══════════════════════════════════════════════════ */
+const ALLERGEN_LIST = [
+  { group:'14 EU-Pflichtallergene (Kennzeichnungspflichtig)' },
+  {id:'gluten',    icon:'🌾', label:'Gluten',           sub:'Weizen, Roggen, Gerste, Dinkel, Hafer'},
+  {id:'krustentiere',icon:'🦐',label:'Krustentiere',    sub:'Krabben, Shrimps, Hummer, Krebse'},
+  {id:'eier',      icon:'🥚', label:'Eier',             sub:'Hühnereiprodukte jeder Art'},
+  {id:'fisch',     icon:'🐟', label:'Fisch',            sub:'Alle Fischarten'},
+  {id:'erdnuesse', icon:'🥜', label:'Erdnüsse',         sub:'Erdnüsse und Erdnussprodukte'},
+  {id:'soja',      icon:'🫘', label:'Soja',             sub:'Sojabohnen und Sojaprodukte'},
+  {id:'milch',     icon:'🥛', label:'Milch / Laktose',  sub:'Kuhmilch, Molke, Laktose'},
+  {id:'nuesse',    icon:'🌰', label:'Schalenfrüchte',   sub:'Mandeln, Hasel-, Walnüsse, Cashews, Pistazien'},
+  {id:'sellerie',  icon:'🥬', label:'Sellerie',         sub:'Sellerie und Sellerieprodukte'},
+  {id:'senf',      icon:'🌿', label:'Senf',             sub:'Senf und Senfprodukte'},
+  {id:'sesam',     icon:'🌱', label:'Sesam',            sub:'Sesamsamen und Sesamprodukte'},
+  {id:'sulfite',   icon:'🍇', label:'Sulfite',          sub:'Schwefeldioxid (Trockenfrüchte, Wein)'},
+  {id:'lupinen',   icon:'🌼', label:'Lupinen',          sub:'Lupinenmehl und -produkte'},
+  {id:'weichtiere',icon:'🐚', label:'Weichtiere',       sub:'Muscheln, Schnecken, Tintenfisch'},
+  { group:'Medikamente & Sonstiges' },
+  {id:'penicillin',icon:'💊', label:'Penicillin',       sub:'Penicillin-Antibiotikagruppe'},
+  {id:'ibuprofen', icon:'💊', label:'Ibuprofen / NSAR', sub:'Ibuprofen, Aspirin, Diclofenac'},
+  {id:'bienen',    icon:'🐝', label:'Insektengift',     sub:'Bienen, Wespen, Hornissen'},
+  {id:'tierhaare', icon:'🐱', label:'Tierhaare',        sub:'Katzen, Hunde, Pferde, allgemein'},
+  {id:'hausstab',  icon:'🏠', label:'Hausstaubmilben',  sub:'Hausstaubmilbenallergie'},
+  {id:'pollen',    icon:'🌸', label:'Pollen',           sub:'Gräser, Bäume, Kräuter'},
+  {id:'latex',     icon:'🧤', label:'Latex',            sub:'Naturlatex-Allergie'}
+];
+
+/* ═══════════════════════════════════════════════════
    APP STATE
 ═══════════════════════════════════════════════════ */
 let profiles = [];
@@ -516,6 +734,9 @@ let favorites = [];
 let fontIdx = 1;
 let searchHistory = [];
 let checks = {};
+let vaccs = {};
+let allergenData = {};
+let growthData = {}; // { profileId: [{date, height, weight}] } // { profileId: { checked: Set, custom: '', notes: '' } }
 let currentFoodAge = 'all';
 let currentAidAge = 'all';
 let phaseObserver = null;
@@ -534,6 +755,9 @@ function init(){
   fontIdx=retrieve('ms_fontIdx',1);
   searchHistory=retrieve('ms_searches',[]);
   checks=retrieve('ms_checks',{});
+  vaccs=retrieve('ms_vaccs',{});
+  allergenData=retrieve('ms_allergens',{});
+  growthData=retrieve('ms_growth',{});
   applyFont();
   renderProfileBar();
   renderPhaseBanner();
@@ -545,6 +769,9 @@ function init(){
   renderSafety();
   initAid();
   renderFavs();
+  renderVaccines();
+  renderAllergies();
+  renderSteckbrief();
   bindTabs();
   bindSearch();
   bindModal();
@@ -591,7 +818,7 @@ function renderProfileBar(){
     btn.innerHTML=`<span style="font-size:16px">${p.emoji}</span><span>${p.name}</span>${m!==null?`<span class="p-age">${fmtAge(m)}</span>`:''}`;
     btn.onclick=()=>{
       if(p.id===activeProfileId){openProfileModal(p);}
-      else{activeProfileId=p.id;store('ms_activeId',activeProfileId);renderProfileBar();renderPhaseBanner();renderPhases();renderMilestones();}
+      else{activeProfileId=p.id;store('ms_activeId',activeProfileId);renderProfileBar();renderPhaseBanner();renderPhases();renderMilestones();renderVaccines();renderAllergies();renderSteckbrief();}
     };
     bar.appendChild(btn);
   });
@@ -645,14 +872,14 @@ function saveProfile(id){
   }
   store('ms_profiles',profiles);
   closeModal();
-  renderProfileBar();renderPhaseBanner();renderPhases();renderMilestones();
+  renderProfileBar();renderPhaseBanner();renderPhases();renderMilestones();renderVaccines();renderAllergies();renderSteckbrief();
 }
 function deleteProfile(id){
   if(!confirm('Profil wirklich löschen?')) return;
   profiles=profiles.filter(p=>p.id!==id);
   if(activeProfileId===id) activeProfileId=profiles[0]?.id||null;
   store('ms_profiles',profiles);store('ms_activeId',activeProfileId);
-  closeModal();renderProfileBar();renderPhaseBanner();renderPhases();renderMilestones();
+  closeModal();renderProfileBar();renderPhaseBanner();renderPhases();renderMilestones();renderVaccines();renderAllergies();renderSteckbrief();
 }
 
 /* ─── Notifications ───────────────────────────── */
@@ -678,6 +905,7 @@ function toggleFav(id){
   store('ms_favs',favorites);
   document.querySelectorAll('[data-fav="'+id+'"]').forEach(b=>{b.classList.toggle('is-fav',isFav(id));b.textContent=isFav(id)?'♥':'♡';});
   renderFavs();
+  renderSteckbrief();
 }
 
 /* ─── Notes ───────────────────────────────────── */
@@ -980,6 +1208,372 @@ function renderFavs(){
 }
 
 /* ═══════════════════════════════════════════════════
+   RENDER – IMPFUNGEN
+═══════════════════════════════════════════════════ */
+function vaccGroupStatus(g) {
+  const prof = activeProfile();
+  if (!prof || !prof.birthdate) return 'na';
+  const m = calcMonths(prof.birthdate);
+  const pv = vaccs[activeProfileId] || {};
+  const allDone = g.items.every(it => pv[it.id]);
+  if (allDone) return 'done';
+  if (m >= g.monthsMax + 1) return 'due';   // overdue
+  if (m >= g.monthsMin) return 'due';        // currently in window
+  if (m >= g.monthsMin - 2) return 'soon';   // coming up within ~2 months
+  return 'upcoming';
+}
+const STATUS_LABEL = { done:'✓ Erledigt', due:'Jetzt fällig!', soon:'Demnächst fällig', upcoming:'Noch nicht fällig', na:'' };
+
+function renderVaccines() {
+  const el = document.getElementById('vacc-list');
+  const pv = vaccs[activeProfileId] || {};
+  el.innerHTML = '';
+  VACCINES.forEach(g => {
+    const status = vaccGroupStatus(g);
+    const done = g.items.filter(it => pv[it.id]).length;
+    const total = g.items.length;
+    const pct = total ? Math.round(done / total * 100) : 0;
+
+    const div = document.createElement('div');
+    div.className = 'vacc-group';
+    div.id = g.id;
+    div.innerHTML = `
+      <div class="vacc-head">
+        <div>
+          <div class="vacc-age">${g.age}</div>
+          <div class="vacc-title">${g.tag}</div>
+        </div>
+        ${status !== 'na' ? `<span class="vacc-status status-${status}">${STATUS_LABEL[status]}</span>` : ''}
+      </div>
+      <div class="vacc-info">${g.info}</div>
+      <div style="padding:8px 18px 4px">
+        <div style="display:flex;justify-content:space-between;font-size:11.5px;color:var(--text-dim)">
+          <span>${done} von ${total} abgehakt</span>
+          <span>${pct}%</span>
+        </div>
+        <div class="vacc-progress-bar"><div class="vacc-progress-fill" style="width:${pct}%"></div></div>
+      </div>
+      <div class="vacc-items">
+        ${g.items.map(it => `
+          <div class="vacc-item${pv[it.id] ? ' checked' : ''}" id="vi-${it.id}">
+            <div class="vacc-item-head" onclick="toggleVacc('${g.id}','${it.id}')">
+              <div class="vacc-check">${pv[it.id] ? '✓' : ''}</div>
+              <div class="vacc-item-name">
+                <div class="vacc-name">${it.name}</div>
+                <div class="vacc-abbr">${it.abbr}</div>
+              </div>
+              <span class="vacc-dose">${it.dose}</span>
+            </div>
+            <div class="vacc-desc">${it.desc}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    // Toggle description on name click
+    div.querySelectorAll('.vacc-item-head').forEach(head => {
+      head.addEventListener('click', function(e) {
+        // Toggle desc only if clicking on the text area (not the checkbox)
+        const item = this.closest('.vacc-item');
+        item.classList.toggle('open');
+      });
+    });
+    el.appendChild(div);
+  });
+}
+
+function toggleVacc(gid, iid) {
+  if (!activeProfileId) { alert('Bitte zuerst ein Kind-Profil anlegen, um Impfungen zu speichern.'); return; }
+  if (!vaccs[activeProfileId]) vaccs[activeProfileId] = {};
+  const v = !vaccs[activeProfileId][iid];
+  vaccs[activeProfileId][iid] = v;
+  store('ms_vaccs', vaccs);
+  // Update item checkbox
+  const itemEl = document.getElementById('vi-' + iid);
+  if (itemEl) {
+    itemEl.classList.toggle('checked', v);
+    itemEl.querySelector('.vacc-check').textContent = v ? '✓' : '';
+  }
+  // Update group progress and status
+  const g = VACCINES.find(x => x.id === gid);
+  const pv = vaccs[activeProfileId] || {};
+  const done = g.items.filter(it => pv[it.id]).length;
+  const total = g.items.length;
+  const pct = Math.round(done / total * 100);
+  const groupEl = document.getElementById(gid);
+  if (groupEl) {
+    groupEl.querySelector('.vacc-progress-fill').style.width = pct + '%';
+    groupEl.querySelectorAll('.vacc-progress-bar + div span, div[style] span')[0] &&
+      (groupEl.querySelector('.vacc-progress-bar').previousElementSibling.querySelector('span').textContent = done + ' von ' + total + ' abgehakt');
+    const statusEl = groupEl.querySelector('.vacc-status');
+    const newStatus = vaccGroupStatus(g);
+    if (statusEl) { statusEl.className = 'vacc-status status-' + newStatus; statusEl.textContent = STATUS_LABEL[newStatus]; }
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   RENDER – ALLERGIEN
+═══════════════════════════════════════════════════ */
+function getAl(){ return allergenData[activeProfileId] || {checked:[], custom:'', notes:''}; }
+function saveAl(data){ allergenData[activeProfileId]=data; store('ms_allergens',allergenData); }
+
+function renderAllergies(){
+  const noProfileEl=document.getElementById('al-no-profile');
+  const bodyEl=document.getElementById('al-body');
+  const prof=activeProfile();
+
+  if(!prof){ noProfileEl.style.display='block'; bodyEl.innerHTML=''; renderAlHeader(); return; }
+  noProfileEl.style.display='none';
+
+  const al=getAl();
+  const checked=new Set(al.checked||[]);
+
+  let html='';
+  let currentGroup='';
+  ALLERGEN_LIST.forEach(item=>{
+    if(item.group){
+      currentGroup=item.group;
+      html+=`<div class="al-stitle">${currentGroup}</div><div class="al-grid" data-group="${currentGroup}">`;
+      return;
+    }
+    const isSel=checked.has(item.id);
+    html+=`
+      <div class="al-item${isSel?' sel':''}" id="alitem-${item.id}" onclick="toggleAllergen('${item.id}')">
+        <span class="al-icon">${item.icon}</span>
+        <div class="al-texts"><div class="al-label">${item.label}</div><div class="al-sub">${item.sub}</div></div>
+        <div class="al-cb">${isSel?'✓':''}</div>
+      </div>`;
+  });
+  // Close last grid div
+  html+='</div>';
+
+  html+=`
+    <div class="al-stitle">Weitere Hinweise / Medikamente / Freitext</div>
+    <textarea class="al-textarea" id="al-custom" placeholder="z. B. Penicillin-Allergie, Adrenalin-Pen im Rucksack, Laktoseintoleranz wird gut vertragen bei kleinen Mengen …">${al.custom||''}</textarea>
+    <textarea class="al-textarea" id="al-notes" placeholder="Notfallhinweise, Arzt-Kontakt, Besonderheiten …" style="margin-top:8px">${al.notes||''}</textarea>
+    <button class="al-save" onclick="saveAllergenText()">Speichern</button>
+  `;
+
+  bodyEl.innerHTML=html;
+  renderAlHeader();
+}
+
+function toggleAllergen(id){
+  if(!activeProfileId){ alert('Bitte zuerst ein Profil anlegen.'); return; }
+  const al=getAl();
+  const checked=new Set(al.checked||[]);
+  checked.has(id)?checked.delete(id):checked.add(id);
+  al.checked=[...checked];
+  saveAl(al);
+  const el=document.getElementById('alitem-'+id);
+  if(el){ el.classList.toggle('sel',checked.has(id)); el.querySelector('.al-cb').textContent=checked.has(id)?'✓':''; }
+  renderAlHeader();
+  renderSteckbrief();
+}
+
+function saveAllergenText(){
+  if(!activeProfileId){ alert('Bitte zuerst ein Profil anlegen.'); return; }
+  const al=getAl();
+  al.custom=document.getElementById('al-custom')?.value.trim()||'';
+  al.notes=document.getElementById('al-notes')?.value.trim()||'';
+  saveAl(al);
+  renderAlHeader();
+  renderSteckbrief();
+  const btn=document.querySelector('.al-save');
+  if(btn){ btn.textContent='✓ Gespeichert'; setTimeout(()=>btn.textContent='Speichern',1500); }
+}
+
+function renderAlHeader(){
+  const el=document.getElementById('al-header-box');
+  if(!el) return;
+  const al=getAl();
+  const checked=new Set(al.checked||[]);
+  if(!checked.size){ el.innerHTML='<span class="al-empty-hint">Noch keine Allergene ausgewählt …</span>'; return; }
+  el.innerHTML=[...checked].map(id=>{
+    const item=ALLERGEN_LIST.find(a=>a.id===id);
+    return item?`<span class="al-header-chip">${item.icon} ${item.label}</span>`:'';
+  }).join('');
+}
+
+/* ═══════════════════════════════════════════════════
+   WACHSTUM HELPERS
+═══════════════════════════════════════════════════ */
+function getGrowth(){ return growthData[activeProfileId]||[]; }
+function saveGrowth(){
+  if(!activeProfileId){ alert('Bitte zuerst ein Profil anlegen.'); return; }
+  const h=document.getElementById('g-height')?.value.trim();
+  const w=document.getElementById('g-weight')?.value.trim();
+  const d=document.getElementById('g-date')?.value;
+  if(!h && !w){ alert('Bitte mindestens Größe oder Gewicht eingeben.'); return; }
+  const entry={ date:d||new Date().toISOString().slice(0,10), height:h?parseFloat(h):null, weight:w?parseFloat(w):null };
+  if(!growthData[activeProfileId]) growthData[activeProfileId]=[];
+  growthData[activeProfileId].push(entry);
+  growthData[activeProfileId].sort((a,b)=>a.date.localeCompare(b.date));
+  store('ms_growth',growthData);
+  renderSteckbrief();
+}
+function deleteGrowthEntry(idx){
+  if(!activeProfileId) return;
+  growthData[activeProfileId].splice(idx,1);
+  store('ms_growth',growthData);
+  renderSteckbrief();
+}
+function fmtDate(d){ try{ return new Date(d+'T12:00').toLocaleDateString('de-DE'); }catch(e){ return d; } }
+
+/* ═══════════════════════════════════════════════════
+   RENDER – STECKBRIEF
+═══════════════════════════════════════════════════ */
+function renderSteckbrief(){
+  const el=document.getElementById('steckbrief-content');
+  const prof=activeProfile();
+  if(!prof){
+    el.innerHTML='<div class="sb-no-profile"><div class="no-icon">🧬</div><div>Bitte lege ein Kind-Profil an,<br>um den Steckbrief zu sehen.</div></div>';
+    return;
+  }
+  const months=calcMonths(prof.birthdate);
+  const pid=phaseId(months);
+  const ph=PHASES.find(p=>p.id===pid);
+  const al=getAl();
+  const checked=new Set(al.checked||[]);
+  const favAid=FIRST_AID.filter(a=>favorites.includes(a.id));
+  const pv=vaccs[activeProfileId]||{};
+  const totalVaccs=VACCINES.reduce((s,g)=>s+g.items.length,0);
+  const doneVaccs=VACCINES.reduce((s,g)=>s+g.items.filter(it=>pv[it.id]).length,0);
+  const vaccPct=totalVaccs?Math.round(doneVaccs/totalVaccs*100):0;
+  const entries=getGrowth();
+  const latest=entries.length?entries[entries.length-1]:null;
+  const today=new Date().toISOString().slice(0,10);
+
+  let html='<div class="sb-card">';
+
+  // ── Profil-Header ──────────────────────────────
+  html+='<div class="sb-profile-row">';
+  html+='<div class="sb-emoji">'+prof.emoji+'</div>';
+  html+='<div class="sb-info">';
+  html+='<div class="sb-name">'+prof.name+'</div>';
+  if(prof.birthdate) html+='<div class="sb-meta">Geb. '+new Date(prof.birthdate+'T12:00').toLocaleDateString('de-DE')+'</div>';
+  if(months!==null) html+='<div class="sb-meta">'+fmtAge(months)+' alt</div>';
+  if(ph) html+='<span class="sb-phase-badge">📍 '+ph.name+' · '+ph.range+'</span>';
+  if(latest){
+    html+='<div class="growth-badges" style="margin-top:8px">';
+    if(latest.height) html+='<span class="growth-badge">📏 '+latest.height+' cm</span>';
+    if(latest.weight) html+='<span class="growth-badge">⚖️ '+latest.weight+' kg</span>';
+    if(latest.date) html+='<span class="growth-badge" style="background:var(--bg);color:var(--text-dim);border-color:var(--border)">'+fmtDate(latest.date)+'</span>';
+    html+='</div>';
+  }
+  html+='</div>';
+  html+='<button class="sb-share" onclick="shareSteckbrief()">⬆ Teilen</button>';
+  html+='</div>';
+
+  // ── Größe & Gewicht ────────────────────────────
+  html+='<div class="sb-section">';
+  html+='<div class="sb-section-title">📏 Größe &amp; Gewicht</div>';
+  html+='<div class="growth-row">';
+  html+='<div class="growth-field"><label>Größe</label><div style="display:flex;gap:6px;align-items:center"><input class="growth-input" id="g-height" type="number" min="30" max="220" step="0.5" placeholder="z. B. 85"><span class="growth-unit">cm</span></div></div>';
+  html+='<div class="growth-field"><label>Gewicht</label><div style="display:flex;gap:6px;align-items:center"><input class="growth-input" id="g-weight" type="number" min="1" max="150" step="0.1" placeholder="z. B. 12.4"><span class="growth-unit">kg</span></div></div>';
+  html+='<div class="growth-field"><label>Messdatum</label><input class="growth-input" id="g-date" type="date" value="'+today+'"></div>';
+  html+='</div>';
+  html+='<button class="growth-save" onclick="saveGrowth()">+ Eintrag speichern</button>';
+  if(entries.length){
+    html+='<div class="growth-history">';
+    const shown=[...entries].reverse().slice(0,8);
+    shown.forEach((e,i)=>{
+      const realIdx=entries.length-1-i;
+      html+='<div class="growth-entry">';
+      html+='<span class="growth-entry-date">'+fmtDate(e.date)+'</span>';
+      html+='<div class="growth-entry-vals">';
+      if(e.height) html+='<span class="growth-val">'+e.height+' <span>cm</span></span>';
+      if(e.weight) html+='<span class="growth-val">'+e.weight+' <span>kg</span></span>';
+      html+='</div>';
+      html+='<button class="growth-del" onclick="deleteGrowthEntry('+realIdx+')" title="Löschen">✕</button>';
+      html+='</div>';
+    });
+    html+='</div>';
+  } else {
+    html+='<div class="growth-empty" style="margin-top:10px">Noch keine Einträge – ersten Wert oben speichern.</div>';
+  }
+  html+='</div>';
+
+  // ── Allergien ──────────────────────────────────
+  html+='<hr class="sb-divider"><div class="sb-section">';
+  html+='<div class="sb-section-title">🌿 Allergien &amp; Unverträglichkeiten</div>';
+  if(checked.size){
+    html+='<div class="sb-allergen-chips">';
+    [...checked].forEach(id=>{
+      const it=ALLERGEN_LIST.find(a=>a.id===id);
+      if(it) html+='<span class="sb-chip">'+it.icon+' '+it.label+'</span>';
+    });
+    html+='</div>';
+  } else { html+='<div class="sb-empty">Keine Allergien eingetragen</div>'; }
+  if(al.custom) html+='<div class="sb-custom-note">'+al.custom+'</div>';
+  if(al.notes) html+='<div class="sb-custom-note" style="margin-top:6px;border-left:3px solid var(--rose)">⚠️ '+al.notes+'</div>';
+  html+='</div>';
+
+  // ── Impfstatus ─────────────────────────────────
+  html+='<hr class="sb-divider"><div class="sb-section">';
+  html+='<div class="sb-section-title">💉 Impfstatus</div>';
+  html+='<div style="display:flex;align-items:center;gap:12px">';
+  html+='<div style="flex:1;background:var(--border);border-radius:3px;height:6px;overflow:hidden"><div style="width:'+vaccPct+'%;height:100%;background:var(--mint);border-radius:3px"></div></div>';
+  html+='<span style="font-size:13px;font-weight:700;color:var(--mint);white-space:nowrap">'+doneVaccs+'/'+totalVaccs+'</span>';
+  html+='<button onclick="document.querySelector(\'.tab-btn[data-view=vaccines]\').click()" style="background:none;border:none;color:var(--peach);font-size:12px;font-weight:700;padding:0">Details →</button>';
+  html+='</div></div>';
+
+  // ── Erste Hilfe Favoriten ──────────────────────
+  html+='<hr class="sb-divider"><div class="sb-section">';
+  html+='<div class="sb-section-title">🩺 Erste-Hilfe-Favoriten <span style="font-weight:400;font-size:10px;color:var(--text-dim)">(♥ auf Erste-Hilfe-Karten setzen)</span></div>';
+  if(favAid.length){
+    html+='<div class="sb-aid-list">';
+    favAid.forEach(a=>{
+      html+='<div class="sb-aid-item">';
+      html+='<div class="sb-aid-name">🆘 '+a.title+'</div>';
+      html+='<ol class="sb-aid-steps">'+a.steps.map(s=>'<li>'+s+'</li>').join('')+'</ol>';
+      html+='<div style="margin-top:6px;font-size:.8rem;color:var(--rose)">⚠️ '+a.emergency+'</div>';
+      html+='</div>';
+    });
+    html+='</div>';
+  } else {
+    html+='<div class="sb-empty">Noch keine Karten markiert – gehe zu „Erste Hilfe" und tippe auf ♡.</div>';
+  }
+  html+='</div></div>';
+
+  el.innerHTML=html;
+}
+
+async function shareSteckbrief(){
+  const prof=activeProfile();if(!prof) return;
+  const al=getAl();
+  const checked=new Set(al.checked||[]);
+  const allergenStr=checked.size
+    ?[...checked].map(id=>{const it=ALLERGEN_LIST.find(a=>a.id===id);return it?it.icon+' '+it.label:'';}).join(', ')
+    :'Keine bekannten Allergien';
+  const months=calcMonths(prof.birthdate);
+  const pid=phaseId(months);
+  const ph=PHASES.find(p=>p.id===pid);
+  const pv=vaccs[activeProfileId]||{};
+  const doneVaccs=VACCINES.reduce((s,g)=>s+g.items.filter(it=>pv[it.id]).length,0);
+  const totalVaccs=VACCINES.reduce((s,g)=>s+g.items.length,0);
+  const favAid=FIRST_AID.filter(a=>favorites.includes(a.id));
+  const entries=getGrowth();
+  const latest=entries.length?entries[entries.length-1]:null;
+  let text='🧬 STECKBRIEF – '+prof.name+'\n';
+  text+='Alter: '+fmtAge(months)+'\n';
+  if(ph) text+='Entwicklungsphase: '+ph.name+' ('+ph.range+')\n';
+  if(latest){
+    if(latest.height) text+='Größe: '+latest.height+' cm\n';
+    if(latest.weight) text+='Gewicht: '+latest.weight+' kg\n';
+    text+='(Messung: '+fmtDate(latest.date)+')\n';
+  }
+  text+='\n🌿 Allergien: '+allergenStr+'\n';
+  if(al.custom) text+='Weitere Hinweise: '+al.custom+'\n';
+  if(al.notes) text+='⚠️ Notfall: '+al.notes+'\n';
+  text+='\n💉 Impfstatus: '+doneVaccs+'/'+totalVaccs+' Impfungen abgehakt\n';
+  if(favAid.length){
+    text+='\n🩺 Erste Hilfe:\n';
+    favAid.forEach(a=>{ text+='• '+a.title+': '+a.steps.join(' → ')+'\n'; });
+  }
+  await doShare('Steckbrief '+prof.name, text);
+}
+
+/* ═══════════════════════════════════════════════════
    SEARCH
 ═══════════════════════════════════════════════════ */
 const IDX=[];
@@ -991,6 +1585,7 @@ FIRST_AID.forEach(a=>{
 FOOD_TOPICS.forEach(t=>['typical','tips','refusal','avoid'].forEach(k=>(t[k]||[]).forEach(text=>IDX.push({type:'food',id:t.id,age:t.ages?.join('/')||'alle',sec:'Essen',cat:t.title,text}))));
 SLEEP_DATA.forEach((s,i)=>[...s.tips,...s.probs].forEach(text=>IDX.push({type:'sleep',id:'sl'+i,age:s.range,sec:'Schlaf',cat:s.range,text})));
 SAFETY_DATA.forEach((s,i)=>[...s.hazards,...s.screen].forEach(text=>IDX.push({type:'safety',id:'sa'+i,age:s.range,sec:'Sicherheit',cat:s.range,text})));
+VACCINES.forEach(g=>g.items.forEach(it=>IDX.push({type:'vaccines',id:g.id,age:g.age,sec:'Impfungen',cat:it.name,text:it.desc+' '+it.dose})));
 
 function norm(s){return s.toLowerCase().replace(/ä/g,'a').replace(/ö/g,'o').replace(/ü/g,'u').replace(/ß/g,'ss');}
 function hl(text,q){const i=norm(text).indexOf(q);if(i<0)return text;return text.slice(0,i)+'<mark>'+text.slice(i,i+q.length)+'</mark>'+text.slice(i+q.length);}
@@ -1022,7 +1617,7 @@ function jumpToResult(type,id,cat){
   document.getElementById('search-input').value='';
   document.getElementById('search-results').classList.remove('active');
   document.getElementById('search-hint').style.display='block';
-  const VIEW={phase:'phases',aid:'aid',food:'food',sleep:'sleep',safety:'safety'};
+  const VIEW={phase:'phases',aid:'aid',food:'food',sleep:'sleep',safety:'safety',vaccines:'vaccines'};
   document.querySelector(`.tab-btn[data-view="${VIEW[type]||'phases'}"]`).click();
   setTimeout(()=>{
     const target=type==='phase'
